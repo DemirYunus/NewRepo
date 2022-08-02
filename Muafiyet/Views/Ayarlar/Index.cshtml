@@ -1,0 +1,192 @@
+﻿
+@{
+    ViewBag.Title = "MUAF || Ayarlar";
+}
+
+@using Muafiyet.App_Classes
+
+@section head{    
+    <link href="~/Content/css/style.css" rel="stylesheet">
+    <link href="~/Content/css/style-responsive.css" rel="stylesheet" />
+<link href="~/Content/toastr.css" rel="stylesheet" />
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <section class="panel">
+            <header class="panel-heading">
+                Ayarlar
+                <input id="toastrText" type="hidden" value="@TempData["Text"]" name="toastrText" />
+                <input id="toastrType" type="hidden" value="@TempData["Durum"]" name="toastrType" />
+            </header>
+            <div class="panel-body">               
+                    <div class="form-group col-md-8">
+                        <form action="/Ayarlar/Kaydet" method="post" role="form" name="Ayarlar" id="Ayarlar">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>Not Sistemi:</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <select name="NotTipiID" id="NotTipiID" class="form-control" data-live-search="true" required="required">
+                                        @{ NotTiplari n = new NotTiplari();}
+                                        @for (int i = 0; i < n.NotTipi.Length; i++)
+                                    {
+                                        if (ViewBag.NotTipID == n.NotTipID[i])
+                                        {
+                                    <option selected="selected" value="@n.NotTipID[i]">@n.NotTipi[i]</option>
+                                        }
+                                        else
+                                        {
+                                    <option value="@n.NotTipID[i]">@n.NotTipi[i]</option>
+                                        }
+
+                                    }
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-success Kaydet" style="float:right;" type="submit"> Kaydet</button>
+                                </div>
+                            </div>
+                        </form>
+                <hr />
+                        <form action="/Ayarlar/IntibakKaydet" method="post" role="form" name="AyarlarIntibak" id="AyarlarIntibak">
+                            <div class="row">                              
+                                <div class="col-md-8">
+                                    <select name="AKTS_Kredi" id="AKTS_Kredi" class="form-control" data-live-search="true" required="required"> 
+                                        @if (ViewBag.IntibakTipi == 1)
+                                        {
+                                            <option selected="selected" value="1">İntibak KREDİ'ye göre yapılsın</option>
+                                            <option value="2">İntibak AKTS'ye göre yapılsın</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="1">İntibak KREDİ'ye göre yapılsın</option>
+                                            <option selected="selected" value="2">İntibak AKTS'ye göre yapılsın</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <br />
+
+                            <div class="row">
+                                <div id="kredisutunu" class="col-md-4">
+                                    <div class="form-group">
+                                        <label style="text-decoration:underline;">Kredi Alt Sınırı</label>               
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">2.Sınıf:</label>
+                                        <input type="number" class="form-control input-sm m-bot15" id="Kredi2" step="1" value="@Convert.ToDouble(ViewBag.Kredi2)" min="0.0"   name="Kredi2" required="required">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">3.Sınıf:</label>
+                                        <input type="number" class="form-control input-sm m-bot15" id="Kredi3" step="1" value="@Convert.ToDouble(ViewBag.Kredi3)" min="0.0"   name="Kredi3" required="required">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">4.Sınıf:</label>
+                                        <input type="number" class="form-control input-sm m-bot15" id="Kredi4" step="1" value="@Convert.ToDouble(ViewBag.Kredi4)" min="0.0"  name="Kredi4" required="required">
+                                    </div>
+                                </div>
+
+                                <div id="aktssutunu" class="col-md-4">
+                                    <div class="form-group">
+                                        <label style="text-decoration:underline;">AKTS Alt Sınırı</label>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">2.Sınıf:</label>
+                                        <input type="number" class="form-control input-sm m-bot15" id="AKTS2" step="1" value="@Convert.ToDouble(ViewBag.AKTS2)" min="0.0"   name="AKTS2" required="required">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">3.Sınıf:</label>
+                                        <input type="number" class="form-control input-sm m-bot15" id="AKTS3" step="1" value="@Convert.ToDouble(ViewBag.AKTS3)" min="0.0"   name="AKTS3" required="required">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">4.Sınıf:</label>
+                                        <input type="number" class="form-control input-sm m-bot15" id="AKTS4" step="1" value="@Convert.ToDouble(ViewBag.AKTS4)" min="0.0"   name="AKTS14" required="required">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-8">
+                                    <button id="intibakKaydet" class="btn btn-success Kaydet" style="float:right;" type="submit"> Kaydet</button>
+                                </div>
+                            </div>
+                        </form>
+                </div>
+
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+@section scripts{  
+    <script src="/Content/js/jquery-1.8.3.min.js"></script>   
+   
+@*<script src="~/Scripts/common-scripts.js"></script>*@
+<script src="/Content/js/form-component.js"></script>
+<script src="~/Scripts/toastr.min.js"></script> 
+@*<script src="~/Scripts/JavaScript.js"></script>*@
+
+    <script type="text/javascript" charset="utf-8">
+
+        $(document).ready(function () {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            var text = document.getElementById("toastrText").value;
+            var durum = document.getElementById("toastrType").value;
+
+            if (durum == "NotTipi") {
+                toastr.success("Not tipi güncellendi...", "Başarılı");
+            }
+            else if (durum == "Şifre") {
+                toastr.success("Şifreniz Güncellendi...", "Başarılı");
+            }
+            else if (durum == "Intibak") {
+                toastr.success(text, "İntibak");
+            }
+            else if (durum == "Hata") {
+                toastr.error(text, "Hata");
+            }
+            else if (durum == "Hata-Ekle") {
+                toastr.warning("Sadece resim veya pdf", "Resim yüklenemedi !");
+                toastr.success("Ders içeriği eklendi...", text);
+            }
+
+        });
+
+        
+        $("#AKTS_Kredi").change(function () {
+            if (this.value == 1) {
+                $('#aktssutunu *').attr("disabled", true);
+                $('#kredisutunu *').attr("disabled", false);
+            }
+            else {
+                $('#aktssutunu *').attr("disabled", false);
+                $('#kredisutunu *').attr("disabled", true);
+            }
+
+        });
+    </script>
+}
+

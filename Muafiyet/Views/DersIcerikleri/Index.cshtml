@@ -1,0 +1,931 @@
+﻿
+@{
+    ViewBag.Title = "MUAF || Ders İçerikleri";
+}
+@using Muafiyet.Models
+@using Muafiyet.App_Classes
+@model List<DersIcerikleri>
+
+
+
+@section head{
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+<link rel="stylesheet" type="text/css" href="/Content/assets/bootstrap-fileupload/bootstrap-fileupload.css" />
+<link href="/Content/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+@*<link href="~/css/jquery.loading.css" rel="stylesheet" />*@
+<link href="~/Content/toastr.css" rel="stylesheet" />
+<link href="/css/MyStyle.css" rel="stylesheet" />
+
+    <style>
+        .nav-tabs > li.active > a,
+        .nav-tabs > li.active > a:hover,
+        .nav-tabs > li.active > a:focus {
+            color: #555555;
+            cursor: default;
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-bottom-color: transparent;
+        }
+
+         .t {
+        white-space: pre-wrap; /* css-3 */
+        white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        word-wrap: break-word; /* Internet Explorer 5.5+ */
+        overflow-wrap: break-word;
+      }
+         .mesaj{
+             font-size:14px;
+         }
+         .hata{
+             font-size:12px;
+         }
+
+          .ui-front {
+    z-index: 9999;
+}
+
+    .ui-autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    float: left;
+    display: none;
+    min-width: 160px;   
+    padding: 4px 0;
+    margin: 0 0 10px 25px;
+    list-style: none;
+    background-color: #ffffff;
+    border-color: #ccc;
+    border-color: rgba(0, 0, 0, 0.2);
+    border-style: solid;
+    border-width: 1px;
+    -webkit-border-radius: 2px !important;
+    -moz-border-radius: 2px !important;
+    border-radius: 2px !important;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+    *border-right-width: 2px;
+    *border-bottom-width: 2px;
+}
+
+.ui-menu-item > a.ui-corner-all {
+    display: block;
+    padding: 3px 15px;
+    clear: both;
+    font-weight: normal;
+    line-height: 18px;
+    color: #555555;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.ui-state-hover, .ui-state-active {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #0088cc;
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    background-image: none;
+}
+
+    .help-block{
+        color:red;      
+    }
+
+  
+    </style>
+   }
+
+<div class="modal fade" id="ModalIcerikEkle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog ui-front">
+        <form action="/DersIcerikleri/Ekle" method="post" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Ders Ekle</h4>
+                </div>
+                <div id="TabModal" class="modal-body">
+
+                    <section class="panel">
+                        <header class="panel-heading tab-bg-dark-navy-blue ">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#home">Ders Tanımlama</a>
+                                </li>
+                                <li class="">
+                                    <a data-toggle="tab" href="#about">İçerik Linki/Resmi</a>
+                                </li>
+                                <li class="">
+                                    <a data-toggle="tab" href="#profile">İçerik Metni</a>
+                                </li>
+
+                            </ul>
+                        </header>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="home" class="tab-pane active">
+                                    <input id="MuafBasvuruID" type="hidden" name="MuafBasvuruID" required="required" />
+                                    <div class="form-group">
+                                        <label>Üniversite:</label>
+                                        <select name="AlinanUniID" id="AlinanUniIDD" class="form-control selectpicker" data-live-search="true" required="required">
+                                            @foreach (Universiteler u in ViewBag.Universiteler)
+                                            {
+                                                if (UyeInfo.KullaniciUniID == u.UniversiteID)
+                                                {
+                                                    <option selected value="@u.UniversiteID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(u.Universite.ToLower())</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@u.UniversiteID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(u.Universite.ToLower())</option>
+                                                }
+
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Fakülte:</label>
+                                        <select name="AlinanFakulteID" id="AlinanFakulteIDD" class="form-control selectpicker" data-live-search="true" required="required">
+                                            @foreach (Fakulteler ff in Data.Fakulte)
+                                            {
+                                                if (UyeInfo.KullaniciFakulteID == ff.FakulteID)
+                                                {
+                                                    <option selected value="@ff.FakulteID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(ff.Fakulte.ToLower())</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@ff.FakulteID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(ff.Fakulte.ToLower())</option>
+                                                }
+
+                                            } 
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Bölüm:</label>
+                                        <select name="AlinanBolumID" id="AlinanBolumIDD" class="form-control selectpicker" data-live-search="true" required="required">
+                                            @foreach (Bolumler bb in Data.Bolum)
+                                            {
+                                                if (UyeInfo.KullaniciBolumID== bb.BolumID)
+                                                {
+                                                    <option selected value="@bb.BolumID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(bb.Bolum.ToLower())</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@bb.BolumID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(bb.Bolum.ToLower())</option>
+                                                }
+
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Ders Kodu:</label>
+                                                <input style="margin-bottom:5px;" type="text" class="form-control input-sm m-bot15" id="DersKodu" placeholder="Ders Kodunu Giriniz" required="required" name="AlinanDersKodu">
+                                                <p class="help-block">Lütfen tekrarlı kayıt girmeyiniz!</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Ders Adı:</label>
+                                                <input style="margin-bottom:5px;" type="text" class="form-control input-sm m-bot15" id="DersAdi" placeholder="Ders Adını Giriniz" required="required" name="AlinanDersAdi">
+                                                <p class="help-block">Lütfen tekrarlı kayıt girmeyiniz!</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group ">
+                                                        <label>Kredi:</label>
+                                                        <select name="AlinanKredisi" id="AlinanKredisii" class="form-control" data-live-search="true" required="required">
+                                                            <option value="0">0</option>
+                                                            <option value="0,5">0.5</option>
+                                                            <option value="1">1</option>
+                                                            <option value="1,5">1.5</option>
+                                                            <option value="2">2</option>
+                                                            <option value="2,5">2.5</option>
+                                                            <option value="3">3</option>
+                                                            <option value="3,5">3.5</option>
+                                                            <option value="4">4</option>
+                                                            <option value="4,5">4.5</option>
+                                                            <option value="5">5</option>
+                                                            <option value="5,5">5.5</option>
+                                                            <option value="6">6</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>AKTS:</label>
+                                                        <select name="AlinanAKTS" id="AlinanAKTS" class="form-control" data-live-search="true" required="required">
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                            <option value="5">5</option>
+                                                            <option value="6">6</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="about" class="tab-pane">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div style="font-size:14px;" class="alert alert-block alert-success fade in">İçeriğin bulunduğu sayfanın URL'sini aşağıya yapıştırınız.</div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control input-sm m-bot15" placeholder="Link Ekleyiniz" name="IcerikLinki">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div style="font-size:14px;" class="alert alert-block alert-warning fade in">
+                                                        <strong>DİKKAT!</strong> Resim veya pdf dosyası yükleyebilirsiniz.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group">
+                                                    <div class="controls col-md-12">
+                                                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                            <span class="btn btn-white btn-file">
+                                                                <span class="fileupload-new"><i class="icon-paper-clip"></i> Dosya Seç</span>
+                                                                <span class="fileupload-exists"><i class="icon-undo"></i> Değiştir</span>
+                                                                <input type="file" name="file" class="default" />
+                                                            </span>
+                                                            <span class="fileupload-preview" style="margin-left:5px;"></span>
+                                                            <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="profile" class="tab-pane">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <textarea id="IcerikMetni" class="form-control ckeditor" name="IcerikNotu" rows="6" maxlength="500"></textarea>
+                                                    <strong>En fazla 500 karakter: <span id="letterCount"></span></strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                    </section>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+                    <button class="btn btn-success diKaydet" type="submit"> Kaydet-Kapat</button>
+                    <button class="btn btn-primary diKaydetDevam" type="button"> Kaydet-Devam Et</button>
+                </div>
+            </div>
+        </form>
+        </div>
+    </div>
+
+<div class="modal fade" id="ModalIcerikGuncelle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="/DersIcerikleri/Guncelle" method="post" role="form" enctype="multipart/form-data">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Ders Güncelle</h4>
+                </div>
+                <div id="TabModalGuncelle" class="modal-body">
+
+                    <section class="panel">
+                        <header class="panel-heading tab-bg-dark-navy-blue ">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#tanimlama">Ders Tanımlama</a>
+                                </li>
+                                <li class="">
+                                    <a data-toggle="tab" href="#linkResim">İçerik Linki/Resmi</a>
+                                </li>
+                                <li class="">
+                                    <a data-toggle="tab" href="#metin">İçerik Metni</a>
+                                </li>
+
+                            </ul>
+                        </header>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="tanimlama" class="tab-pane active">
+                                    <div class="form-group">
+                                        <label>Üniversite:</label>
+                                        <select name="AlinanUniID" id="AlinanUniID" class="form-control selectpicker" data-live-search="true" required="required">
+
+                                            @foreach (Universiteler u in ViewBag.Universiteler)
+                                            {
+                                                <option value="@u.UniversiteID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(u.Universite.ToLower())</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Fakülte:</label>
+                                        <select name="AlinanFakulteID" id="AlinanFakulteID" class="form-control selectpicker" data-live-search="true" required="required">
+                                            @foreach (Fakulteler ff in Data.Fakulte)
+                                            {
+                                                <option value="@ff.FakulteID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(ff.Fakulte.ToLower())</option>
+                                            } 
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Bölüm:</label>
+                                        <select name="AlinanBolumID" id="AlinanBolumID" class="form-control selectpicker" data-live-search="true" required="required">
+                                            @foreach (Bolumler bb in Data.Bolum)
+                                            {
+                                                <option value="@bb.BolumID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(bb.Bolum.ToLower())</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <input id="AlinanDersID" type="hidden" name="AlinanDersID" required="required" />
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Ders Kodu:</label>
+                                            <input type="text" class="form-control input-sm m-bot15" id="DKodu" placeholder="Ders Kodu Giriniz" required="required" name="AlinanDersKodu">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Ders Adı:</label>
+                                            <input type="text" class="form-control input-sm m-bot15" id="DAdi" placeholder="Ders Adını Giriniz" required="required" name="AlinanDersAdi">
+                                        </div>
+                                    </div> 
+                                         
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label>Kredi:</label>
+                                                    <select name="AlinanKredisi" id="KredisiG" class="form-control" data-live-search="true" required="required">
+                                                        <option value="0,0">0</option>
+                                                        <option value="0,5">0.5</option>
+                                                        <option value="1,0">1</option>
+                                                        <option value="1,5">1.5</option>
+                                                        <option value="2,0">2</option>
+                                                        <option value="2,5">2.5</option>
+                                                        <option value="3,0">3</option>
+                                                        <option value="3,5">3.5</option>
+                                                        <option value="4,0">4</option>
+                                                        <option value="4,5">4.5</option>
+                                                        <option value="5,0">5</option>
+                                                        <option value="5,5">5.5</option>
+                                                        <option value="6,0">6</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label>AKTS:</label>
+                                                    <select name="AlinanAKTS" id="AlinanAKTSG" class="form-control" data-live-search="true" required="required">
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="linkResim" class="tab-pane">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div style="font-size:14px;" class="alert alert-block alert-success fade in">İçeriğin bulunduğu sayfanın URL'sini aşağıya yapıştırınız.</div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control input-sm m-bot15" id="IcerikLinki" placeholder="Link Ekleyiniz" name="IcerikLinki">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <a hidden="hidden" target="_blank" id="link" href="" data-toggle="modal" class="btn btn-primary modalEkle"><i class="icon-link"></i>  Sayfaya Git</a>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div style="font-size:14px;" class="alert alert-block alert-warning fade in">
+                                                        <strong><i class="icon-warning-sign"></i></strong>   Sadece resim veya pdf dosyası yükleyebilirsiniz.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <div class="form-group">
+                                                        <div class="controls col-md-12">
+                                                            <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                                <span class="btn btn-white btn-file">
+                                                                    <span class="fileupload-new"><i class="icon-paper-clip"></i> Dosya Seç</span>
+                                                                    <span class="fileupload-exists"><i class="icon-undo"></i> Değiştir</span>
+                                                                    <input type="file" name="file" class="default" />
+                                                                </span>
+                                                                <span id="dosyaadi" class="fileupload-preview" style="margin-left:5px;"></span>
+                                                                <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <a hidden="hidden" id="resim" target="_blank" href="" data-toggle="modal" class="btn btn-info"><i class="icon-search"></i>   Önizle</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="metin" class="tab-pane">
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <textarea id="IcerikMetniG" class="form-control" name="IcerikNotu" rows="10" cols="80"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+</section>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+                    <button class="btn btn-success diKaydet" type="submit"> Güncelle</button>                  
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="modalSil" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Ders Sil</h4>
+            </div>
+            <div class="modal-body">
+                <p class="mesaj"></p>
+                <p class="label label-danger hata"></p>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+                <button id="dersSil" class="btn btn-danger dersSill" type="button"> Evet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalYukleniyor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Ders Sil</h4>
+            </div>
+            <div class="modal-body">
+                <p class="mesaj"></p>
+                <p class="label label-danger hata"></p>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+                <button id="dersSil" class="btn btn-danger dersSill" type="button"> Evet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                Dersler
+                <hr />
+                <a href="#ModalIcerikEkle" data-toggle="modal" class="btn btn-primary btn-sm modalEkle">Yeni Ders</a>
+               
+                <div class="btn-group">
+                    <button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle" type="button"> <i class=" icon-filter"></i>  Filtre  <span class="caret"></span></button>
+                    <ul role="menu" class="dropdown-menu">
+                        <li>@Html.ActionLink("Bölüm","Index", "DersIcerikleri", new { filtreID = -1 }, null)</li>
+                        <li>@Html.ActionLink("Fakülte", "Index", "DersIcerikleri", new { filtreID = -2 }, null)</li>
+                        <li>@Html.ActionLink("Üniversite", "Index", "DersIcerikleri", new { filtreID = -3 }, null)</li>
+                        <li>@Html.ActionLink("Tüm Dersler", "Index", "DersIcerikleri", new { filtreID = 0 }, null)</li>                     
+                    </ul>
+                </div>
+
+                <input id="toastrText" type="hidden" value="@TempData["Text"]" name="toastrText"/>  
+                <input id="toastrType" type="hidden" value="@TempData["Durum"]" name="toastrType" />    
+            </header>
+            <div class="panel-body">
+                <div id="tbl" class="adv-table">
+                    <table class="table table-striped table-advance table-hover display" id="example">
+                        <thead>
+                            <tr>
+                                <th>Üniversite</th>
+                                <th>Fakülte</th>
+                                <th>Bölüm</th>
+                                <th>Kodu</th>
+                                <th>Adı</th>
+                                <th>Kredi</th>
+                                <th>AKTS</th>
+                                <th>İçerik</th>                                
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int fakID = 0; int bolumID = 0; string bolm = ""; string fakt = "";}
+                            @foreach (DersIcerikleri di in Model)
+                            {
+                                <tr>                                 
+                                    <td class="t" style="width:17%;">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(di.Universiteler.Universite.ToLower())</td>
+                                    @{ 
+                                        if (di.AlinanFakulteID != fakID)
+                                        {
+                                            foreach (Fakulteler ff in Data.Fakulte)
+                                            {
+                                                if (di.AlinanFakulteID == ff.FakulteID)
+                                                {
+                                                    fakt = @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(ff.Fakulte.ToLower());
+                                                    fakID = ff.FakulteID;
+                                                    break;
+                                                }
+                                            }
+                                        }                                        
+                                    }
+                                    <td class="t" style="width:17%;">@fakt</td>
+                                    @{ 
+                                        if (di.AlinanBolumID != bolumID)
+                                        {
+                                            foreach (Bolumler bb in Data.Bolum)
+                                            {
+                                                if (di.AlinanBolumID == bb.BolumID)
+                                                {
+                                                    bolm = @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(bb.Bolum.ToLower());
+                                                    bolumID = bb.BolumID;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    <td class="t" style="width:16%;">@bolm</td>
+                                    <td class="t" style="width:6%;">@di.AlinanDersKodu</td>
+                                    <td class="t" style="width:18%;">@di.AlinanDersAdi</td>
+                                    <td class="t" style="width:5%;">@di.AlinanKredisi</td>
+                                    <td class="t" style="width:5%;">@di.AlinanAKTS</td>
+                                    @if (@di.IcerikLinki == null && @di.IcerikNotu == null && (@di.IcerikResimYolu == null || @di.IcerikResimYolu == ""))
+                                    {
+                                        <td style="width:5%;">                                           
+                                            <span class="label label-danger label-mini">Yok</span>
+                                            
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td style="width:5%;">
+                                            <span class="label label-success label-mini">Var</span>
+                                        </td>
+                                    }
+                                    <td  style="width:6%;">                                        
+                                        <span data-toggle="modal" data-target="#ModalIcerikGuncelle">
+                                            <a href="#ModalIcerikGuncelle" class="btn btn-info btn-xs tooltips modalAc" data-toggle="tooltip" data-placement="top" data-original-title="Güncelle" data-uniid="@di.AlinanUniID" data-fktid="@di.AlinanFakulteID" data-blmid="@di.AlinanBolumID" data-ders="@di.AlinanDersAdi" data-kodu="@di.AlinanDersKodu" data-kredi="@di.AlinanKredisi" data-dersid="@di.AlinanDersID" data-link="@di.IcerikLinki" data-iceriknotu="@di.IcerikNotu" data-akts="@di.AlinanAKTS" data-dosya="@di.IcerikResimYolu"><i class="icon-pencil"></i></a>
+                                        </span>
+                                        <span data-toggle="modal" data-target="#modalSil">
+                                            <a href="#modalSil" class="btn btn-danger btn-xs tooltips modalSil" data-toggle="tooltip" data-placement="top" data-original-title="Sil" data-dersid="@di.AlinanDersID" data-dersadi="@di.AlinanDersAdi"><i class="icon-trash "></i></a>
+                                        </span>
+                                    </td>
+                                </tr>
+                            }                              
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section scripts{
+   
+    <script src="/Content/js/jquery-1.8.3.min.js"></script>   
+<script src="~/Content/js/jquery-ui-1.9.2.custom.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/Content/assets/advanced-datatable/media/js/jquery.dataTables.js"></script> 
+ <script type="text/javascript" src="/Content/assets/bootstrap-fileupload/bootstrap-fileupload.js"></script>
+<script type="text/javascript" src="/Content/assets/ckeditor/ckeditor.js"></script>
+<script class="include" type="text/javascript" src="/Content/js/jquery.dcjqaccordion.2.7.js"></script> 
+    <script src="~/Scripts/toastr.min.js"></script>
+@*<script src="~/jquery-loading-master/dist/jquery.loading.js"></script>*@
+    <script src="/Scripts/JavaScript.js"></script>
+<script src="~/Scripts/charactercount.js"></script>
+
+    @*Tablo*@
+    <script type="text/javascript" charset="utf-8">
+
+//        CKEDITOR.replace('IcerikNotu', {
+//   height: '300',
+//  
+//});
+
+
+        $(document).ready(function () {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            var text = document.getElementById("toastrText").value;
+            var durum = document.getElementById("toastrType").value;
+
+            if (durum == "Sil") {
+                toastr.success("Ders içeriği silindi...", text);
+            }
+            else if (durum == "Ekle") {
+                toastr.success("Ders içeriği eklendi...", text);
+            }
+            else if (durum == "Güncelle") {
+                toastr.success("Ders içeriği güncellendi...", text);
+            }
+            else if (durum == "Hata") {
+                toastr.error(text, "Hata");
+            }
+            else if (durum == "Hata-Ekle") {
+                toastr.warning("Sadece resim veya pdf", "Resim yüklenemedi !");
+                toastr.success("Ders içeriği eklendi...", text);
+            }
+
+            $("#example").dataTable({
+                "aaSorting": [[7, "desc"]],
+                iDisplayLength: 25
+            });
+
+        });
+
+
+        $('.selectpicker').selectpicker({
+            style: 'btn-new',
+            size: 4
+        });
+
+        CKEDITOR.replace('IcerikMetni', {
+
+            // Remove some plugins that would conflict with the bottom
+            // toolbar position.
+            removePlugins: 'link, about, insert, resource',
+            maxlength: '500'
+        });
+
+        CKEDITOR.replace('IcerikMetniG', {
+            removePlugins: 'link, about, insert, resource'
+        });
+
+        $("#example").on("click", ".modalSil", function () {
+            var dersadi = $(this).data("dersadi");
+
+            $(".modal-body>p.mesaj").html(dersadi + " dersi silinsin mi?");
+
+            var id = $(this).data("dersid");
+            $(".dersSill").data("id", id);
+            $(".dersSill").data("dersadi", dersadi);
+        });
+
+        $("#example").on("click", ".modalAc", function () {
+            var uniID = $(this).data("uniid");
+            var fktID = $(this).data("fktid");
+            var blmID = $(this).data("blmid");
+            var DersAdi = $(this).data("ders");
+            var derskodu = $(this).data("kodu");
+            var Kredisi = $(this).data("kredi");
+            var lnk = $(this).data("link");
+            var ID = $(this).data("dersid");
+            var icerikNotu = $(this).data("iceriknotu");
+            var AKTS = $(this).data("akts");
+            var dosya = $(this).data("dosya");
+
+            if (dosya == "") {
+                $("#resim").hide();
+            }
+            else {
+                $("#resim").show();
+            }
+
+            if (lnk == "") {
+                $("#link").hide();
+            }
+            else {
+                $("#link").show();
+            }
+
+            $('#AlinanUniID').selectpicker('val', uniID);
+            $('#AlinanFakulteID').selectpicker('val', fktID);
+            $('#AlinanBolumID').selectpicker('val', blmID);
+            $("#AlinanDersID").val(ID);
+            $("#DAdi").val(DersAdi);
+            $("#KredisiG").val(Kredisi);
+            $("#AlinanAKTSG").val(AKTS);
+            $("#DKodu").val(derskodu);
+
+            //$("#dosyaadi span").text(dosya);
+            //$("#dosyaadi span").append(dosya);
+            $("#dosyaadi").text(dosya);
+
+            $("#IcerikLinki").val(lnk);
+            $("#IcerikMetniG").val(icerikNotu);
+            CKEDITOR.instances.IcerikMetniG.setData(icerikNotu);
+
+            $("#link").attr("href", lnk);
+            $("#resim").attr("href", "/IcerikResmi/IcerikOnizleme/" + ID);
+            $(".diKaydet").data("id", ID);
+        });
+
+          //$(".modalSil").click(function () {
+          //    var dersadi = $(this).data("dersadi");
+
+          //    $(".modal-body>p.mesaj").html(dersadi + " dersi silinsin mi?");
+
+          //    var id = $(this).data("dersid");
+          //    $(".dersSill").data("id", id);
+          //    $(".dersSill").data("dersadi", dersadi);
+          //});
+
+
+          //$(".modalAc").click(function () {
+          //    var uniID = $(this).data("uniid");
+          //    var fktID = $(this).data("fktid");
+          //    var blmID = $(this).data("blmid");
+          //    var DersAdi = $(this).data("ders");
+          //    var derskodu = $(this).data("kodu");
+          //    var Kredisi = $(this).data("kredi");
+          //    var lnk = $(this).data("link");
+          //    var ID = $(this).data("dersid");
+          //    var icerikNotu = $(this).data("iceriknotu");
+          //    var AKTS = $(this).data("akts");
+          //    var dosya = $(this).data("dosya");
+
+          //    if (dosya == "") {
+          //        $("#resim").hide();
+          //    }
+          //    else {
+          //        $("#resim").show();
+          //    }
+
+          //    if (lnk == "") {
+          //        $("#link").hide();
+          //    }
+          //    else {
+          //        $("#link").show();
+          //    }
+
+          //    $('#AlinanUniID').selectpicker('val', uniID);
+          //    $('#AlinanFakulteID').selectpicker('val', fktID);
+          //    $('#AlinanBolumID').selectpicker('val', blmID);
+          //    $("#AlinanDersID").val(ID);
+          //    $("#DAdi").val(DersAdi);
+          //    $("#KredisiG").val(Kredisi);
+          //    $("#AlinanAKTSG").val(AKTS);
+          //    $("#DKodu").val(derskodu);
+
+          //    //$("#dosyaadi span").text(dosya);
+          //    //$("#dosyaadi span").append(dosya);
+          //    $("#dosyaadi").text(dosya);
+
+          //    $("#IcerikLinki").val(lnk);
+          //    $("#IcerikMetniG").val(icerikNotu);
+          //    CKEDITOR.instances.IcerikMetniG.setData(icerikNotu);
+
+          //    $("#link").attr("href", lnk);
+          //    $("#resim").attr("href", "/IcerikResmi/IcerikOnizleme/" + ID);
+          //    $(".diKaydet").data("id", ID);
+          //});
+
+          $(".dersSill").click(function () {
+              var id = $(this).data("id");
+              var dersadi = $(this).data("dersadi");
+
+              $.ajax({
+                  type: "POST",
+                  url: "/DersIcerikleri/Sil",
+                  data: { "DersID": id },
+                  success: function (durum) {
+                      if (durum == "başarılı") {
+                          window.location.replace("/DersIcerikleri/Index");                          
+                      }
+                      else if (durum == "Hata") {
+                          $(".modal-body>p.hata").html("Silme anında bir hata oluştu");
+                      }
+                      else if (durum == "silinemez") {
+                          $(".modal-body>p.hata").html("Başvuruda kullanılmış bu ders silinemez !");
+                      }
+                  }
+              });
+          });
+
+
+          //$(".modalAc").click(function () {
+          //    var uniID = $(this).data("uniid");
+          //    var fktID = $(this).data("fktid");
+          //    var blmID = $(this).data("blmid");
+          //    var DersAdi = $(this).data("ders");
+          //    var derskodu = $(this).data("kodu");
+          //    var Kredisi = $(this).data("kredi");
+          //    var lnk = $(this).data("link");
+          //    var ID = $(this).data("dersid");
+          //    var icerikNotu = $(this).data("iceriknotu");
+          //    var AKTS = $(this).data("akts");
+          //    var dosya = $(this).data("dosya");
+
+          //    if (dosya == "") {
+          //        $("#resim").hide();
+          //    }
+          //    else {
+          //        $("#resim").show();
+          //    }
+
+          //    if (lnk == "") {
+          //        $("#link").hide();
+          //    }
+          //    else {
+          //        $("#link").show();
+          //    }
+
+          //    $('#AlinanUniID').selectpicker('val', uniID);
+          //    $('#AlinanFakulteID').selectpicker('val', fktID);
+          //    $('#AlinanBolumID').selectpicker('val', blmID);
+          //    $("#AlinanDersID").val(ID);
+          //    $("#DAdi").val(DersAdi);
+          //    $("#KredisiG").val(Kredisi);
+          //    $("#AlinanAKTSG").val(AKTS);
+          //    $("#DKodu").val(derskodu);
+
+          //    //$("#dosyaadi span").text(dosya);
+          //    //$("#dosyaadi span").append(dosya);
+          //    $("#dosyaadi").text(dosya);
+
+          //    $("#IcerikLinki").val(lnk);
+          //    $("#IcerikMetniG").val(icerikNotu);
+          //    CKEDITOR.instances.IcerikMetniG.setData(icerikNotu);
+
+          //    $("#link").attr("href", lnk);
+          //    $("#resim").attr("href", "/IcerikResmi/IcerikOnizleme/" + ID);
+          //    $(".diKaydet").data("id", ID);
+          //});
+
+          $("#DersKodu").autocomplete({
+              source: function (request, response) {
+                  $.ajax({
+                      url: '@Url.Action("TamamlaDersKodu", "DersSecimi")',
+                      dataType: "json",
+                      data: { search: $("#DersKodu").val(), uniid: $("#AlinanUniIDD").val(), fktid: $("#AlinanFakulteIDD").val(), blmid: $("#AlinanBolumIDD").val() },
+                      success: function (data) {
+                          response($.map(data, function (item) {
+                              return { label: item.AlinanDersKodu, value: item.AlinanDersKodu };
+                          }))
+                      },
+                      error: function (xhr, status, error) {
+                          alert("Hata");
+                      }
+                  })
+              }
+          });
+
+          $("#DersAdi").autocomplete({
+              source: function (request, response) {
+                  $.ajax({
+                      url: '@Url.Action("TamamlaDersAdi", "DersSecimi")',
+                      dataType: "json",
+                      data: { search: $("#DersAdi").val(), uniid: $("#AlinanUniIDD").val(), fktid: $("#AlinanFakulteIDD").val(), blmid: $("#AlinanBolumIDD").val() },
+                      success: function (data) {
+                          response($.map(data, function (item) {
+                              return { label: item.AlinanDersAdi, value: item.AlinanDersAdi };
+                          }))
+                      },
+                      error: function (xhr, status, error) {
+                          alert("Hata");
+                      }
+                  })
+              }
+          });
+                   
+    </script> 
+
+}

@@ -1,0 +1,211 @@
+﻿
+@{
+    ViewBag.Title = "MUAF || Önceki Başvurular";
+    Layout = "~/Views/Shared/_LayoutGiris.cshtml";
+}
+@using Muafiyet.Models
+@using Muafiyet.App_Classes
+@model List<IcerikKararlari>
+
+@section head{
+    <link href="/Content/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">  
+
+    <style>
+        .my_class {
+background-color:lightgray;
+}
+
+    </style>
+}
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    Önceki Başvuru Sonuçları             
+                </header>
+                <div class="panel-body">
+                    @if (ViewBag.Sonuc == "" || ViewBag.Sonuc == "KayitYok")
+                    {
+                    <div id="Secenkeler" class="row">
+                        <div class="col-md-12">
+                            <form class="form-inline" action="/Sonuc/TopluSonuclar" method="post" role="form">
+                                <div class="form-group">                                   
+                                    <select name="KararUniID" id="KararUniID" class="form-control selectpicker" data-live-search="true" required="required">
+                                        @foreach (Universiteler u in ViewBag.Universiteler)
+                                        {
+                                            <option value="@u.UniversiteID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(u.Universite.ToLower())</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">                                  
+                                    <select name="KararFakulteID" id="KararFakulteID" class="form-control selectpicker" data-live-search="true" required="required">
+                                        @foreach (Fakulteler ff in Data.Fakulte)
+                                        {                                            
+                                                <option value="@ff.FakulteID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(ff.Fakulte.ToLower())</option>
+                                            
+                                        }
+                                        
+                                    </select>
+                                </div>
+                                <div class="form-group">                                    
+                                    <select name="KararBolumID" id="KararBolumID" class="form-control selectpicker" data-live-search="true" required="required">
+                                        @foreach (Bolumler bb in Data.Bolum)
+                                        {   
+                                                <option value="@bb.BolumID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(bb.Bolum.ToLower())</option>
+                                            
+                                        }
+                                        
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <button id="Goster" style="font-size:14px; font-weight: bold;" type="submit" class="btn btn-success btn-block"><i class="icon-search"></i>  Göster</button>
+                                    </div>
+                                </div>                                
+                            </form>
+                        </div>                  
+                        </div>
+                    }                
+                   @if (ViewBag.Sonuc == "KayitVar")
+                    {
+                    <div id="Liste" class="row">
+                        <div class="col-md-12">
+                            <a href="/Sonuc/TopluSonuclar" id="YeniArama" class="btn btn-primary btn-sm"><i class="icon-reply"></i>   Yeniden Sorgula</a>
+                            <div class="adv-table">
+                                <table class="table table-advance table-hover display" id="example">
+                                    <thead>
+                                        <tr>
+                                            <th>Ders (@ViewBag.MevcutUni)</th>
+                                            <th>Alınan Üniversite</th>
+                                            <th>Alınan Fakülte</th>
+                                            <th>Alınan Bölüm</th>
+                                            <th>Alınan Ders</th>
+                                            <th>Sonuç</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                       
+                                            @foreach (IcerikKararlari ts in Model)
+                                            {
+                                            <tr>                                                
+                                                <td>@ts.DersIcerikleri.AlinanDersAdi</td>                                         <td>
+    @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(ts.DersIcerikleri1.Universiteler.Universite.ToLower())
+                                            </td>
+                                                @{string fkl = "";}
+                                                @foreach (Fakulteler ff in Data.Fakulte)
+                                                {
+                                                    if (ff.FakulteID == ts.DersIcerikleri1.AlinanFakulteID)
+                                                    {
+                                                        fkl = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(ff.Fakulte.ToLower());
+                                                        break;
+                                                    }
+                                                }
+                                                
+                                                <td>@fkl</td>
+                                                @{ string blm = "";}
+                                                @foreach (Bolumler bb in Data.Bolum)
+                                                {
+                                                    if (bb.BolumID == ts.DersIcerikleri1.AlinanBolumID)
+                                                    {
+                                                        blm = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(bb.Bolum.ToLower());
+                                                        break;
+                                                    }
+                                                }
+                                                <td>@blm</td>
+                                                <td>@ts.DersIcerikleri1.AlinanDersAdi</td>                                  
+                                                @if (ts.KararUye1==0 || ts.KararUye2 == 0 || ts.KararUye3 == 0)
+                                                {
+                                                    <td>
+                                                        <span class="label label-warning label-mini">Değerlendirmede</span>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    if (ts.KararUye1 == -1 && ts.KararUye2 == -1 && ts.KararUye3 == -1)
+                                                    {
+                                                        <td>
+                                                            <span class="label label-danger label-mini">Red</span>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <span class="label label-success label-mini">Kabul</span>
+                                                        </td>
+                                                    }
+                                                }
+                                            </tr>
+                                            }
+                                        
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                   @if (ViewBag.Sonuc == "")
+                   {
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div style="font-size:14px;" class="alert alert-block alert-info fade in">
+                               Bölümünüzce uygun görülmüş dersleri görmek için kayıtlı olduğunuz üniversite, fakülte ve bölüm bilgilerini giriniz.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div style="font-size:14px;" class="alert alert-block alert-warning fade in">
+                                <strong style="text-decoration:underline; margin-bottom:5px;">DİKKAT!</strong>
+                                 <p style="margin-top:5px;"> Bu sayfada, <strong>içerik bakımından</strong>  değerlendirilmiş tercihlere ait sonuçlar listelenmektedir.</p> 
+                                <p style="margin-top:5px;">Muaf olmak için terciheriniz, içerik bakımından uygun olması gerekmektedir. Ayrıca;</p>                             
+                                <p style="margin-top:15px;">&#9656; Alınan dersten başarılı olunmalı,</p>
+                                <p style="margin-top:5px;">&#9656; Alınan dersin kredisi, en az başvurduğunuz dersin kredisi kadar olmalı,</p>
+                                <p style="margin-top:5px;">&#9656; Alınan dersin ön şarlı olduğu dersten de başarılı olunmalıdır (önşartlı ise).</p> 
+                             
+                            </div>
+                        </div>
+                    </div>
+                   } 
+                    @if (ViewBag.Sonuc == "KayitYok")
+                    {
+                        <br />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div style="font-size:14px;" class="alert alert-block alert-danger fade in">
+                                        <strong>DİKKAT!</strong> Kayıt bulunamadı
+                                    </div>
+                                </div>
+                            </div>
+                    }       
+                    </div>
+            </section>
+        </div>
+    </div>
+
+    @section scripts{
+        <script src="~/Content/js/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" language="javascript" src="~/Content/assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
+        <script class="include" type="text/javascript" src="/Content/js/jquery.dcjqaccordion.2.7.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+  
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#example').dataTable({
+                    "aaSorting": [[5, "asc"]],
+                    "aoColumnDefs": [{ "sClass": "my_class", "aTargets": [0] }],
+                    iDisplayLength: 25
+                });
+            });
+
+            $('.selectpicker').selectpicker({
+                style: 'btn-new',
+                size: 4
+            });
+         
+        </script>
+    }

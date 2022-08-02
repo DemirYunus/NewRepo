@@ -1,0 +1,310 @@
+﻿
+@{
+    ViewBag.Title = "MUAF || Başvuru Ekle";
+}
+
+@using Muafiyet.Models
+@using Muafiyet.App_Classes
+
+
+@section head{
+    <link rel="stylesheet" type="text/css" href="/Content/assets/bootstrap-datepicker/css/datepicker.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/assets/bootstrap-timepicker/compiled/timepicker.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/assets/bootstrap-datetimepicker/css/datetimepicker.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <link href="~/Content/css/style.css" rel="stylesheet">
+    <link href="~/Content/css/style-responsive.css" rel="stylesheet" />
+<link href="~/Content/toastr.css" rel="stylesheet" />
+    <link href="/css/MyStyle.css" rel="stylesheet" />
+}
+
+ @*newtonsoft json framework*@
+
+<div class="modal fade" id="ModalOgrenciEkle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="#" role="form">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Öğrenci Ekle</h4>            
+
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Numara:</label>
+                                <input type="text" class="form-control input-sm m-bot15" id="kNo" placeholder="Okul Numaranızı giriniz" name="KullaniciOkulNo" required="required">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Ad:</label>
+                                <input type="text" class="form-control input-sm m-bot15" id="kAdi" placeholder="Adınızı giriniz" required="required" name="KullaniciAdi">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Soyad:</label>
+                                <input type="text" class="form-control input-sm m-bot15" id="kSoyadi" placeholder="Soyadınızı giriniz" required="required" name="KullaniciSoyadi">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Telefon:</label>
+                                <input type="text" data-mask="(999) 999-9999" class="form-control input-sm m-bot15" id="kTlf" placeholder="Telefon Numaranızı giriniz" required="required" name="KullaniciTlf">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Email:</label>
+                                <input type="email" class="form-control input-sm m-bot15" id="kEmail" placeholder="Email giriniz" required="required" name="KullaniciEMail">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Adres:</label>
+                                <input type="text" class="form-control input-sm m-bot15" id="kAdres" placeholder="Adresinizi giriniz" name="KullaniciAdres">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+                    <button  class="btn btn-success kKaydet" type="submit"> Kaydet</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+
+<div class="row">
+    <div class="col-md-12">
+        <section class="panel">
+            <header class="panel-heading">             
+                <p class="pull-right">Muafiyet Başvuru Ekleme Sayfası</p>                  
+                    <form class="form-inline" role="form">                       
+                        <div class="form-group">
+                            <label class="sr-only" for="exampleInputEmail2">Öğrenci No</label>
+                            <input type="text" class="form-control input-sm " id="ogrNo" placeholder="Öğrenci No Giriniz">
+                        </div>
+                        <button href="#" type="button" onclick="datayigetir($('#ogrNo').val())" class="btn btn btn-warning btn-sm getir">Getir</button>
+                        <a href="#ModalOgrenciEkle" data-toggle="modal" class="btn btn-primary btn-sm">Yeni Öğrenci</a>  
+                    </form>   
+            </header>
+            <div class="panel-body">
+                <div class="col-md-6">                 
+                        <div class="form-group">
+                            <label for="OgrSoyAdi">Adı:</label>
+                            <input type="text" class="form-control input-sm m-bot15" id="OgrAdi" disabled="disabled" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label for="OgrSoyAdi">Soyadı:</label>
+                            <input type="text" class="form-control input-sm m-bot15" id="OgrSoyAdi" disabled="disabled" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label for="OgrTlf">Telefon:</label>
+                            <input type="text" class="form-control input-sm m-bot15" id="OgrTlf" disabled="disabled" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label for="OgrEmail">e-mail:</label>
+                            <input type="text" class="form-control input-sm m-bot15" id="OgrEmail" disabled="disabled" required="required">
+                        </div>                
+                </div>
+                <div id="basvuruDetay" hidden="hidden" class="col-md-6">
+                    <form action="/Basvurular/Ekle" method="post" role="form">
+                                              
+                        <input type="hidden" id="ogrID" name="OgrenciID" required="required"/>
+                        <input type="hidden" id="Denklik" name="Denklik" value="0" required="required" />  
+                                               
+                        <div class="form-group">                            
+                                <label>Başvuru Tarihi: <strong style="color:red">(Ay/Gün/Yıl)</strong></label>                                       
+                               <input id="BasvuruTarihii" class="form-control form-control-inline input-sm m-bot15 default-date-picker" size="16" type="datetime" name="BasvuruTarihi" required="required" />                
+                        </div>                      
+                        <div class="form-group">                           
+                                <label>Üniversite:</label>                              
+                                <select name="MuafIsUniID" class="form-control selectpicker" data-live-search="true">
+                                    @foreach (Universiteler u in ViewBag.Universiteler)
+                                    {
+                                        <option value="@u.UniversiteID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(u.Universite.ToLower())</option>
+                                    }
+                                </select>
+                                                   
+                        </div>                        
+                        <div class="form-group">                           
+                                <label>Fakülte:</label>                          
+                                <select name="MuaIstFaktID" class="form-control selectpicker" data-live-search="true">
+                                    @foreach (Fakulteler ff in Data.Fakulte)
+                                    {
+                                            <option value="@ff.FakulteID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(ff.Fakulte.ToLower())</option>
+                                    }                                   
+                                </select>
+                         
+                        </div>
+                        <div class="form-group">                           
+                                <label>Bölüm:</label>                   
+                            <select name="MuafIsBolumID" class="form-control selectpicker" data-live-search="true">
+                                @foreach (Bolumler bb in Data.Bolum)
+                                {                                    
+                                        <option value="@bb.BolumID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(bb.Bolum.ToLower())</option>
+                                }
+                            </select>
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label for="exampleInputPassword1">Kayıt Şekli:</label>
+                                <select name="KayitSekliID" class="form-control input-sm m-bot15">
+                                    @{KayitSekilleri kyt = new KayitSekilleri();}                                  
+                                        @for (int i = 0; i < kyt.KayitSekli.Length; i++)
+                                        {
+                                        <option value="@kyt.KayitSekliID[i]">@kyt.KayitSekli[i]</option>
+                                        }                                    
+                                </select>
+                            </div>
+                            <div class="form-group col-md-8">                                    
+                                <label for="exampleInputPassword1">Not Sistemi:</label>
+                                <select id="NotTipiID" name="NotTipiID" class="form-control input-sm m-bot15">
+                                    @{NotTiplari n = new NotTiplari();}
+                                    @for (int i = 0; i < n.NotTipi.Length; i++)
+                                    {
+                                        <option value="@n.NotTipID[i]">@n.NotTipi[i]</option>
+                                    }
+                                </select>                                    
+                            </div>
+                        </div>
+                            <div class="pull-right">
+                                <button type="submit" class="btn btn-success btn-sm">Kaydet</button>
+                                <a href="/Basvurular/Index" class="btn btn-info btn-sm">Listeye Dön</a>
+                            </div>
+
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section scripts{
+    <script src="/Content/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="/Content/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="/Content/assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="/Content/assets/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+    <script class="include" type="text/javascript" src="/Content/js/jquery.dcjqaccordion.2.7.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+
+<script src="~/Scripts/JavaScript.js"></script>
+        <!--common script for all pages-->
+@*<script src="/Content/js/common-scripts.js"></script>*@
+@*<script src="~/Scripts/common-scripts.js"></script>*@
+<!--this page  script only-->
+@*<script src="/Content/js/advanced-form-components.js"></script>*@
+@*<script src="~/Scripts/advanced-form-components.js"></script>*@
+<script src="~/Scripts/toastr.min.js"></script>
+
+    @*<script src="/Content/js/form-validation-script.js"></script>*@
+@*<script src="~/Scripts/JavaScript.js"></script>*@
+
+<script type="text/javascript" charset="utf-8"> 
+   
+
+       $('.selectpicker').selectpicker({
+              style: 'btn-new',
+              size: 4
+       });
+
+       $("#BasvuruTarihii").datepicker();
+
+       $(document).ready(function () {
+           var d = new Date();
+           var strDate = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear();
+
+           $("#BasvuruTarihii").val(strDate);
+       });
+     
+
+       function datayigetir(ogrno) {
+           var urlsi = "/Basvurular/KullaniciGetir";
+
+           $.ajax({
+               url: urlsi,
+               dataType: "json",
+               type: "Get",
+               data: { okulno: ogrno },
+               success: function (e) {
+                   if (e == null) {
+                       $("#ogrNo").val("");
+                       alert("Bu numarada bir öğrenci kayıtlı değil");
+                       $("#basvuruDetay").hide();
+                   }
+                   else {                  
+                           $("#OgrAdi").val(e.KullaniciAdi);
+                           $("#OgrSoyAdi").val(e.KullaniciSoyadi);
+                           $("#OgrTlf").val(e.KullaniciTlf);
+                           $("#OgrEmail").val(e.KullaniciEMail);
+                           $("#ogrID").val(e.KullaniciID);                          
+                   
+                           $("#basvuruDetay").show();
+                   }
+               },
+               error: function (e) {
+                   alert("Data çekilemedi");
+                   $("#basvuruDetay").hide();
+               }
+
+           });
+       }
+
+       $(".kKaydet").click(function () {
+
+           var kulNo = $("#kNo").val();
+           var kulUnvanId = 11;
+           var kulAdi = $("#kAdi").val();
+           var kulSoyAdi = $("#kSoyadi").val();
+           var kulTlf = $("#kTlf").val();
+           var kulEmail = $("#kEmail").val();
+           var kulSifre = 0;
+           var kulAdres = $("#kAdres").val();
+           var unvanID = 11;
+           var rolID = 6;
+
+           $.ajax({
+               type: "POST",
+               url: "/Kullanicilar/BasvurudanEkle/",
+               data: {
+                   KullaniciOkulNo: kulNo,
+                   KullaniciUnvanID: kulUnvanId,
+                   KullaniciAdi: kulAdi,
+                   KullaniciSoyadi: kulSoyAdi,
+                   KullaniciTlf: kulTlf,
+                   KullaniciEMail: kulEmail,
+                   KullaniciSifre: kulSifre,
+                   KullaniciAdres: kulAdres,
+                   KullaniciUnvanID: unvanID,
+                   KullaniciRolID: rolID
+               },
+               success: function () {
+                   toastr.options = {
+                       "closeButton": false,
+                       "debug": false,
+                       "newestOnTop": false,
+                       "progressBar": false,
+                       "positionClass": "toast-top-right",
+                       "preventDuplicates": false,
+                       "onclick": null,
+                       "showDuration": "300",
+                       "hideDuration": "1000",
+                       "timeOut": "3000",
+                       "extendedTimeOut": "1000",
+                       "showEasing": "swing",
+                       "hideEasing": "linear",
+                       "showMethod": "fadeIn",
+                       "hideMethod": "fadeOut"
+                   }
+                   toastr.success("Öğrenci eklendi...", "Başarılı");
+                   
+                  // window.location.replace("/Basvurular/Ekle");
+               }
+           });
+       });
+     
+     </script>
+
+}
+
+
+
+

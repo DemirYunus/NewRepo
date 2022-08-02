@@ -1,0 +1,177 @@
+﻿
+@{
+    ViewBag.Title = "MUAF || Sonuçlar";
+    Layout = "~/Views/Shared/_LayoutGiris.cshtml";
+}
+
+@using Muafiyet.Models
+@using Muafiyet.App_Classes
+
+@section head{
+    <link href="/Content/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                Başvuru Sonuçları
+            </header>
+            <div class="panel-body">
+                @if (ViewBag.Sonuc == "" || ViewBag.Sonuc == "KayitYok")
+                {
+                    <div id="Secenkeler" class="row">
+                        <div class="col-md-12">
+                            <form class="form-inline" action="/Sonuc/Sonuclar" method="post" role="form">
+                                <div class="form-group">                                    
+                                    <input type="text" class="form-control" id="ogrNo" placeholder="Öğrenci numarasını giriniz" name="ogrNo" required="required">
+                                </div>                       
+                                <button id="Goster" type="submit" class="btn btn-success">Göster</button>
+                            </form>
+                        </div>
+                    </div>
+                                            }
+                @if (ViewBag.Sonuc == "KayitVar")
+                {
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <section class="panel">
+                                <header class="panel-heading">
+                                    <a href="/Sonuc/Sonuclar" id="YeniArama" class="btn btn-primary btn-sm">Yeniden Seç</a>
+                                </header>
+                                <div class="panel-body">
+                                    <div class="adv-table">
+                                        <table class="table table-striped table-advance table-hover display" id="example">
+                                            <thead>
+                                                <tr>
+                                                    <th>Numara</th>
+                                                    <th>Ad</th>
+                                                    <th>Soyad</th>
+                                                    <th>Kayıt Şekli</th>
+                                                    <th>Üniversite</th>
+                                                    <th>Fakülte</th>
+                                                    <th>Bölüm</th>
+                                                    <th>Durum</th>
+                                                    <th>Rapor</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (MuafiyetBasvurulari bs in Model)
+                                                {
+                                                    <tr>
+                                                        <td>@bs.Kullanicilar.KullaniciOkulNo</td>
+                                                        <td>@bs.Kullanicilar.KullaniciAdi</td>
+                                                        <td>@bs.Kullanicilar.KullaniciSoyadi</td>
+                                                        @if (bs.KayitSekliID == 1)
+                                                        {
+                                                            <td>
+                                                                <span class="label label-info label-mini">Merkezi Yerleştirme</span>
+                                                            </td>
+                                                        }
+                                                        else if(bs.KayitSekliID == 2)
+                                                        {
+                                                            <td>
+                                                                <span class="label label-primary label-mini">Dikey Geçiş</span>
+                                                            </td>
+                                                        }
+                                                        else if (bs.KayitSekliID == 3)
+                                                        {
+                                                            <td>
+                                                                <span class="label label-default label-mini">Yaz Okulu</span>
+                                                            </td>
+                                                        }
+                                                        <td>@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(bs.Universiteler.Universite.ToLower())</td>
+                                                        @{string fkl = "";}
+                                                        @foreach (Fakulteler ff in Data.Fakulte)
+                                                        {
+                                                            if (ff.FakulteID == bs.MuaIstFaktID)
+                                                            {
+                                                                fkl = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(ff.Fakulte.ToLower());
+                                                                break;
+                                                            }
+                                                        }                                                      
+                                                        <td>@fkl</td>
+                                                        @{ string blm = "";}
+                                                        @foreach (Bolumler bb in Data.Bolum)
+                                                        {
+                                                            if (bb.BolumID == bs.MuafIsBolumID)
+                                                            {
+                                                                blm = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(bb.Bolum.ToLower());
+                                                                break;
+                                                            }
+                                                        }
+                                                        <td>@blm</td>
+                                                        @if (@bs.Durum == "Tamamlandı")
+                                                        {
+                                                            <td>
+                                                                <span class="label label-success label-mini">@bs.Durum</span>
+                                                            </td>
+                                                        }
+                                                        else if (@bs.Durum == "Değerlendiriliyor")
+                                                        {
+                                                            <td>
+                                                                <span class="label label-warning label-mini">@bs.Durum</span>
+                                                            </td>
+                                                        }
+                                                        else if (@bs.Durum == "Ders Seçilmemiş")
+                                                        {
+                                                            <td>
+                                                                <span class="label label-info label-mini">@bs.Durum</span>
+                                                            </td>
+                                                        }
+                                                        <td>
+                                                            <a href="/Basvurular/KmsnRaporu/@bs.MuafBasvuruID" class="btn btn-default btn-xs tooltips" data-toggle="tooltip" data-placement="top" data-original-title="Komisyon Raporu"><i class="icon-print "></i></a>         
+                                                        </td>
+                                                    </tr>
+                                                            }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                }                                          
+                @if (ViewBag.Sonuc == "")
+                {
+                    <br />
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div style="font-size:14px;" class="alert alert-block alert-success fade in">
+                                <strong>DİKKAT!</strong> Öğrenci numaranızı giriniz.
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (ViewBag.Sonuc == "KayitYok")
+                {
+                    <br />
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div style="font-size:14px;" class="alert alert-block alert-danger fade in">
+                                    <strong>DİKKAT!</strong> Kayıt bulunamadı
+                                </div>
+                            </div>
+                        </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" language="javascript" src="~/Content/assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
+
+    <script type="text/javascript">
+            $(document).ready(function () {
+                $('#example').dataTable({
+                    "aaSorting": [[5, "asc"]],
+                    "aoColumnDefs": [{ "sClass": "my_class", "aTargets": [0] }],
+                    iDisplayLength: 25
+                });
+            });        
+
+    </script>
+}

@@ -1,0 +1,217 @@
+﻿
+
+@{
+    ViewBag.Title = "MUAF || Başvuru Güncelle";
+}
+
+@using Muafiyet.Models
+@using Muafiyet.App_Classes
+@model MuafiyetBasvurulari
+
+@section head{
+    <link rel="stylesheet" type="text/css" href="/Content/assets/bootstrap-datepicker/css/datepicker.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <link href="/css/MyStyle.css" rel="stylesheet" />
+}
+
+
+<div class="modal fade" id="ModalOgrenciEkle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Öğrenci Ekle</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @*<form action="/Kullanicilar/Ekle" method="post" role="form">*@
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Numara:</label>
+                            <input type="text" class="form-control input-sm m-bot15" id="kNo" placeholder="Okul Numaranızı giriniz" name="KullaniciOkulNo">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Ad:</label>
+                            <input type="text" class="form-control input-sm m-bot15" id="kAdi" placeholder="Adınızı giriniz" required="required" name="KullaniciAdi">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Soyad:</label>
+                            <input type="text" class="form-control input-sm m-bot15" id="kSoyadi" placeholder="Soyadınızı giriniz" required="required" name="KullaniciSoyadi">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Telefon:</label>
+                            <input type="text" class="form-control input-sm m-bot15" id="kTlf" placeholder="Telefon Numaranızı giriniz" required="required" name="KullaniciTlf">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Email:</label>
+                            <input type="text" class="form-control input-sm m-bot15" id="tanimi" placeholder="Email giriniz" required="required" name="KullaniciEMail">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Adres:</label>
+                            <input type="text" class="form-control input-sm m-bot15" id="kAdres" placeholder="Adresinizi giriniz" name="KullaniciAdres">
+                        </div>
+                    </div>
+
+                    @*</form>*@
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+                <button class="btn btn-warning kKaydet" type="submit"> Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <section class="panel">
+            <header class="panel-heading">
+                <p class="pull-right"> Başvuru Güncelleme Sayfası</p>
+                <form class="form-inline" role="form">
+                    <div class="form-group">
+                        <label class="sr-only" for="exampleInputEmail2">Öğrenci No</label>
+                        <input type="text" class="form-control input-sm " id="ogrNo" placeholder="Öğrenci No Giriniz" value="@Model.Kullanicilar.KullaniciOkulNo">
+                    </div>
+                    <button href="#" type="button" class="btn btn btn-warning btn-sm getir">Getir</button>
+                    <a href="#ModalOgrenciEkle" data-toggle="modal" class="btn btn-primary btn-sm">Yeni Öğrenci</a>
+                </form>
+            </header>
+            <div class="panel-body">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="OgrSoyAdi">Adı:</label>
+                        <input type="text" class="form-control input-sm m-bot15" id="OgrAdi" disabled="disabled" value="@Model.Kullanicilar.KullaniciAdi">
+                    </div>
+                    <div class="form-group">
+                        <label for="OgrSoyAdi">Soyadı:</label>
+                        <input type="text" class="form-control input-sm m-bot15" id="OgrSoyAdi" disabled="disabled" value="@Model.Kullanicilar.KullaniciSoyadi">
+                    </div>
+                    <div class="form-group">
+                        <label for="OgrTlf">Telefon:</label>
+                        <input type="text" class="form-control input-sm m-bot15" id="OgrTlf" disabled="disabled" value="@Model.Kullanicilar.KullaniciTlf">
+                    </div>
+                    <div class="form-group">
+                        <label for="OgrEmail">e-mail:</label>
+                        <input type="text" class="form-control input-sm m-bot15" id="OgrEmail" disabled="disabled" value="@Model.Kullanicilar.KullaniciEMail">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <form action="/Basvurular/Ekle" method="post" role="form">
+
+                        <input type="hidden" name="OgrenciID" value="@Model.OgrenciID" required="required" />
+
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Üniversite:</label>
+                            <select name="MuafIsUniID" class="form-control selectpicker" data-live-search="true">
+                                @foreach (Universiteler u in ViewBag.Universiteler)
+                                {
+                                    if (u.UniversiteID == Model.MuafIsUniID)
+                                    {
+                                        <option selected="selected" value="@u.UniversiteID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(u.Universite.ToLower())</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@u.UniversiteID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(u.Universite.ToLower())</option>
+                                    }
+
+                                }
+                            </select>
+
+
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Fakülte:</label>
+                            <select name="MuaIstFaktID" class="form-control selectpicker" data-live-search="true">
+                                @foreach (Fakulteler ff in Data.Fakulte)
+                                {
+                                    if (ff.FakulteID == Model.MuaIstFaktID)
+                                    {
+                                        <option selected="selected" value="@ff.FakulteID">@ff.Fakulte</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@ff.FakulteID">@ff.Fakulte</option>
+                                    }
+                                }                                
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Bölüm:</label>
+                            <select name="MuafIsBolumID" class="form-control selectpicker" data-live-search="true">
+                                @foreach (Bolumler bb in Data.Bolum)
+                                {
+                                    if (Model.MuafIsBolumID == bb.BolumID)
+                                    {
+                                        <option selected="selected" value="@bb.BolumID">@bb.Bolum</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@bb.BolumID">@bb.Bolum</option>
+                                    }
+                                }                              
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Kayıt Şekli:</label>
+                            <select name="KayitSekliID" class="form-control input-sm m-bot15">
+                                @{ KayitSekilleri k = new KayitSekilleri();}
+                                @for (int i = 0; i < k.KayitSekli.Length; i++)
+                                {
+                                    if (k.KayitSekliID[i] == Model.KayitSekliID)
+                                    {
+                                        <option selected="selected" value="@k.KayitSekliID[i]">@k.KayitSekli[i]</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@k.KayitSekliID[i]">@k.KayitSekli[i]</option>
+                                    }
+                                }                             
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3"> Başvuru Tarihi</label>
+                            <div class="col-md-4">
+                                <div class="input-group date form_datetime-component">
+                                    <input type="text" class="form-control" readonly="" size="16">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-danger date-set"><i class="icon-calendar"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pull-right">
+                            <button type="submit" class="btn btn-success btn-sm">Güncelle</button>
+                            <a href="/Basvurular/Index" class="btn btn-info btn-sm">Listeye Dön</a>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </section>
+    </div>
+</div>
+
+@section scripts{
+    <script src="/Content/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="/Content/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="/Content/assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+
+    <script type="text/javascript" charset="utf-8">
+       $('.selectpicker').selectpicker({
+              style: 'btn-new',
+              size: 4
+       });
+    </script>
+}
+
+
+
+

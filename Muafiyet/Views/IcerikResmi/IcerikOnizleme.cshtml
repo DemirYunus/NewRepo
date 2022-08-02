@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "MUAF || İçerik Önizleme";
+    Layout = null;
+}
+
+@using Muafiyet.Models
+@model DersIcerikleri
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    <link href="/Content/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/Content/css/bootstrap-reset.css" rel="stylesheet">
+    <link href="/Content/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="/Content/css/style.css" rel="stylesheet">
+    <link href="/Content/css/style-responsive.css" rel="stylesheet" />
+
+    <title>İçerik Resmi</title>
+</head>
+<body>
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    İçerik Resmi             
+                </header>
+                <div class="panel-body">
+                    <img src="/images/@Model.IcerikResimYolu" />
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+</html>

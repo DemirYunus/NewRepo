@@ -1,0 +1,213 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+@using Muafiyet.App_Classes
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Mosaddek">
+    <meta name="keyword" content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <link rel="shortcut icon" href="~/Content/img/cloudicon.png"> 
+   
+
+    <title>@ViewBag.Title</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/css/bootstrap-reset.css" rel="stylesheet">
+    <!--external css-->
+    <link href="~/Content/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!--<link href="/Content/css/navbar-fixed-top.css" rel="stylesheet">-->
+    <!-- Custom styles for this template -->
+    <link href="~/Content/css/style.css" rel="stylesheet">
+    <link href="~/Content/css/style-responsive.css" rel="stylesheet" />
+    <link href="~/css/MyStyle.css" rel="stylesheet" />
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+    <!--[if lt IE 9]>
+      <script src="/Content/js/html5shiv.js"></script>
+      <script src="/Content/js/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .site-footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;  
+   text-align: center;
+}
+    </style>
+
+    @RenderSection("head", false)
+
+</head>
+
+<body class="full-width">
+    <section id="container" class="">
+        <!--header start-->
+        <header class="header white-bg">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!--logo start-->
+                <a href="/Acilis/Panel" class="logo">Mu<span>Aff</span></a>
+                <!--logo end-->
+                <div class="horizontal-menu navbar-collapse collapse ">
+                    <ul class="nav navbar-nav">                        
+                        <li><a href="/Kullanicilar/Index">Kullanıcılar</a></li>
+                        <li><a href="/DersIcerikleri/Index">Dersler</a></li>                        
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#">Başvurular <b class=" icon-angle-down"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/Basvurular/Index">Muafiyet</a></li>
+                                <li><a href="/Basvurular/Denklik">Denklik</a></li>                             
+                            </ul>
+                        </li> 
+                        <li><a href="/DersIcerikleri/GetirIcerikDegelendirme">Değerlendir</a></li> 
+                        @if (UyeInfo.KullaniciEMail == "adminMuaf")
+                        {
+                        <li><a href="/Uye/UyelikOnay">Üyelik</a></li>
+                        <li><a href="/Uye/Sabitler">Sabitler</a></li>
+                        <li><a href="/Uye/TanitimMailiAt">Tanıtım</a></li>
+                        }
+
+                    </ul>
+                </div>
+                <div class="nav notify-row" id="top_menu">
+                    <div class="top-nav ">
+                        <ul class="nav pull-right top-menu" style="margin-right:15px; margin-bottom:10px">
+                            <!-- notification dropdown start-->
+                            <li id="header_notification_bar" class="dropdown">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <i class="icon-bell-alt"></i>
+                                    @if (Notification.BekleyenToplamSayisi > 0)
+                                    {<span class="badge bg-warning">@Notification.BekleyenToplamSayisi</span>}
+                                </a>
+                                <ul class="dropdown-menu extended notification">
+                                    <div class="notify-arrow notify-arrow-yellow"></div>
+                                    @if (@Notification.BekleyenToplamSayisi == 0)
+                                    {
+                                        <li>
+                                            <p class="yellow">Bildiriminiz bulunmuyor</p>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <p class="yellow">@Notification.BekleyenToplamSayisi bildiriminiz bulunuyor</p>
+                                        </li>
+                                    }                                   
+                                    @if (@Notification.BekleyenIcerikBildiriSayisi > 0)
+                                    {
+                                        <li>
+                                            <a href="/DersIcerikleri/GetirIcerikDegelendirme">
+                                                <span class="label label-danger"><i class="icon-bell"></i></span>
+                                                İçerik Değerlendirme:
+                                                <strong>@Notification.BekleyenIcerikBildiriSayisi</strong>
+                                            </a>
+                                        </li>
+                                    } 
+                                    @if (@Notification.BekleyenBasvuruBildiriSayisi>0)
+                                    {                                       
+                                        <li>
+                                            <a href="/Basvurular/Index">
+                                                <span class="label label-danger"><i class="icon-bolt"></i></span>
+                                                Başvuru değerlendirme:
+                                                <strong>@Notification.BekleyenBasvuruBildiriSayisi</strong>                                               
+                                            </a>
+                                        </li>
+                                    } 
+                                    @if (@Notification.BaskanYokmi == 1)
+                                    {
+                                        <li>
+                                            <a href="/Kullanicilar/Index">
+                                                <span class="label label-warning"><i class=" icon-user"></i></span>
+                                                Kms. Baş. Tanımlayınız.                                                
+                                            </a>
+                                        </li>
+                                    }  
+                                    @if (@Notification.Uye1Yokmi == 1)
+                                    {
+                                        <li>
+                                            <a href="/Kullanicilar/Index">
+                                                <span class="label label-warning"><i class=" icon-user"></i></span>
+                                                Kms. 1.Üye Tanımlayınız.
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (@Notification.Uye2Yokmi == 1)
+                                    {
+                                        <li>
+                                            <a href="/Kullanicilar/Index">
+                                                <span class="label label-warning"><i class=" icon-user"></i></span>
+                                                Kms. 2.Üye Tanımlayınız.
+                                            </a>
+                                        </li>
+                                    }                                                           
+                                </ul>
+                            </li>
+                            <!-- notification dropdown end -->
+
+                            <!-- user login dropdown start-->
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <span class="username">@UyeInfo.Unvan @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(UyeInfo.KullaniciAdi) @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(UyeInfo.KullaniciSoyadi)</span>
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu extended logout">
+                                    <div class="log-arrow-up"></div>
+                                    <li><a href="/Uye/Profil"><i class=" icon-suitcase"></i>Profil</a></li>
+                                    <li><a href="/Ayarlar/Index"><i class="icon-cog"></i> Ayarlar</a></li>                               
+                                    <li><a href="/Uye/CikisYap"><i class="icon-key"></i> Çıkış</a></li>
+                                </ul>
+                            </li>
+                            <!-- user login dropdown end -->
+                        </ul>
+                    </div>
+                 </div> 
+                </div>
+        </header>
+        <!--header end-->
+        <!--sidebar start-->
+        <!--sidebar end-->
+        <!--main content start-->
+        <section id="main-content">
+            <section class="wrapper">
+                <!-- page start-->
+                @RenderBody()
+                <!-- page end-->
+            </section>
+        </section>
+        <!--main content end-->
+        <!--footer start-->
+        <footer class="site-footer">
+            <div class="text-center">
+                2017 &copy; Muaf by KUROPSİS.                
+            </div>
+        </footer>
+        <!--footer end-->
+    </section>
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="~/Content/js/jquery.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script class="include" type="text/javascript" src="~/Content/js/jquery.dcjqaccordion.2.7.js"></script>
+    <script type="text/javascript" src="~/Content/js/hover-dropdown.js"></script>
+    <script src="~/Content/js/jquery.scrollTo.min.js"></script>
+    <script src="~/Content/js/jquery.nicescroll.js" type="text/javascript"></script>
+    <script src="~/Content/js/respond.min.js"></script>
+    <!--common script for all pages-->
+    @*<script src="~/Scripts/common-scripts.js"></script>*@
+
+    @RenderSection("scripts", false)
+</body>
+</html>
+

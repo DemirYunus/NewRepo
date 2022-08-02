@@ -1,0 +1,663 @@
+﻿
+@{
+    ViewBag.Title = "MUAF || Kullanıcılar";
+}
+@using Muafiyet.Models
+@using System.Reflection
+@using Muafiyet.App_Classes
+
+
+
+@section head{   
+<link href="~/Content/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+
+       <!-- Bootstrap core CSS -->
+<link href="~/Content/css/bootstrap.min.css" rel="stylesheet">
+<link href="~/Content/css/bootstrap-reset.css" rel="stylesheet">
+<!--external css-->
+<link href="~/Content/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="~/Content/assets/bootstrap-datepicker/css/datepicker.css" />
+<link rel="stylesheet" type="text/css" href="~/Content/assets/bootstrap-colorpicker/css/colorpicker.css" />
+<link rel="stylesheet" type="text/css" href="~/Content/assets/bootstrap-daterangepicker/daterangepicker.css" />
+<!-- Custom styles for this template -->
+<link href="~/Content/css/style.css" rel="stylesheet">
+<link href="~/Content/css/style-responsive.css" rel="stylesheet" />
+<link href="~/Content/toastr.css" rel="stylesheet" />
+<link href="~/css/MyStyle.css" rel="stylesheet" />
+
+    <style>
+
+        .mesaj {
+            font-size:14px;
+        }
+         .hata {
+               font-size:12px;    
+        }
+        .help{
+            padding-top:-3px;
+            color:gray;
+        }
+        
+    </style>
+    }
+
+<div class="modal fade" id="ModalEkle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="form">
+                <form action="/Kullanicilar/Ekle" method="post" role="form" name="KEkle" id="KEkle">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Kullanıcı Ekle</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Ünvan:</label>
+                                    <select name="KullaniciUnvanID" id="kUnvanID" class="form-control input-sm m-bot15" required="required">
+                                        <option value="">Ünvan Seçiniz</option>
+                                        @{Unvanlar unv = new Unvanlar();}
+                                        @for (int i = 0; i < unv.unvanAdi.Length; i++)
+                                        {
+                                            <option value="@unv.unvanID[i]">@unv.unvanAdi[i]</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label id="lblNo" for="exampleInputPassword1"></label>
+                                    <input type="text" class="form-control input-sm m-bot15" id="kNo" placeholder="Okul/Sicil numaranızı giriniz" name="KullaniciOkulNo" required="required">
+                                    @*<p style="color:#00A7B2; padding-top:-10px; margin-top:-10px;">Personel için sicil numarası giriniz.</p>*@
+                                </div>
+                               
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Ad:</label>
+                                    <input type="text" class="form-control input-sm m-bot15" id="kAdi" placeholder="Adınızı giriniz" name="KullaniciAdi" required="required">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Soyad:</label>
+                                    <input type="text" class="form-control input-sm m-bot15" id="kSoyadi" placeholder="Soyadınızı giriniz" name="KullaniciSoyadi" required="required">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Telefon:</label>
+                                    <input type="text" data-mask="(999) 999-9999" class="form-control input-sm m-bot15" id="kTlf" placeholder="Telefon numaranızı giriniz" required="required" name="KullaniciTlf">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Email:</label>
+                                    <input  type="email" autocomplete="new-password" role="presentation" class="form-control input-sm m-bot15" id="email" placeholder="Email giriniz" required="required" value="" name="KullaniciEMail">
+                                </div>
+
+                                <div id="sifreGrup" class="form-group">
+                                    <label for="exampleInputPassword1">Şifre:</label>
+                                    <input type="password" autocomplete="new-password" role="presentation"  class="form-control input-sm m-bot15" id="kSifre" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" value="" name="KullaniciSifre" required="required">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Adres:</label>
+                                    <input type="text" class="form-control input-sm m-bot15" id="kAdres" placeholder="Adresinizi giriniz" name="KullaniciAdres">
+                                </div>
+                            </div>
+                        </div>
+
+                        </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+                        <button class="btn btn-success kKaydet" type="submit"> Kaydet</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalGuncelle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="form">
+                <form action="/Kullanicilar/Guncelle" method="post" role="form" name="KGuncelle" id="KGuncelle">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Kullanıcı Güncelle</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+
+                                <input id="KullaniciIDG" type="hidden" name="KullaniciID" required="required" />
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Ünvan:</label>
+                                    <select name="KullaniciUnvanID" id="kGUnvanID" class="form-control input-sm m-bot15" required="required">
+                                        <option value="">Ünvan Seçiniz</option>
+                                        @for (int i = 0; i < unv.unvanAdi.Length; i++)
+                                        {
+                                            <option value="@unv.unvanID[i]">@unv.unvanAdi[i]</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label id="lblNu" for="exampleInputPassword1">Numara:</label>
+                                    <input type="text" class="form-control input-sm m-bot15" id="kGNo" placeholder="Okul/Sicil numaranızı giriniz" name="KullaniciOkulNo" required="required">                        
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Ad:</label>
+                                    <input type="text" class="form-control input-sm m-bot15" id="kGAdi" placeholder="Adınızı giriniz" name="KullaniciAdi" required="required">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Soyad:</label>
+                                    <input type="text" class="form-control input-sm m-bot15" id="kGSoyadi" placeholder="Soyadınızı giriniz" name="KullaniciSoyadi" required="required">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Telefon:</label>
+                                    <input type="text" data-mask="(999) 999-9999" class="form-control input-sm m-bot15" id="kGTlf" placeholder="Telefon numaranızı giriniz" required="required" name="KullaniciTlf">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Email:</label>
+                                    <input type="email" class="form-control input-sm m-bot15" id="Gemail" placeholder="Email giriniz" required="required" name="KullaniciEMail">
+                                </div>
+
+                                <div id="sifreGroup" class="form-group">
+                                    <label for="exampleInputPassword1">Şifre:</label>
+                                    <input type="password" class="form-control input-sm m-bot15" id="kGSifre" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" name="KullaniciSifre" required="required">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Adres:</label>
+                                    <input type="text" class="form-control input-sm m-bot15" id="kGAdres" placeholder="Adresinizi giriniz" name="KullaniciAdres">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+                        <button class="btn btn-success kKaydet" type="submit"> Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalSil" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Kullanıcı Sil</h4>
+            </div>
+            <div class="modal-body">
+                <p class="mesaj"></p>                
+                <p class=" label label-danger hata"></p>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+                <button class="btn btn-danger kullaniciSil" type="button"> Evet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalRol" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="form">
+                <form action="/Kullanicilar/RolGuncelle" method="post" role="form" name="KRGuncellee" id="KRGuncellee">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Rol Güncelle</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input id="KullaniciRID" type="hidden" name="KullaniciID" />
+
+                                <div class="form-group">  
+                                    <label>Ad soyad:</label>                                  
+                                    <input type="text" class="form-control input-sm m-bot15" id="kRAdiSoyadi"  name="KullaniciAdSoyad" disabled="disabled">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Rol:</label>
+                                    <select name="KullaniciRolID" id="KullaniciRolID" class="form-control input-sm m-bot15" required="required">
+                                        <option value="">Rol Seçiniz</option>                                        
+                                        @{Rollar r = new Rollar();}
+                                        @for (int i = 0; i <r.RolAciklama.Length; i++)
+                                        {
+                                            <option value="@r.RolID[i]">@r.Rol[i]</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                @if (ViewBag.Mesaj != null)
+                                {
+                                    <div class="alert alert-block alert-danger fade in">
+                                        <strong>DİKKAT!</strong> @ViewBag.Mesaj
+                                    </div>
+                                } 
+
+                            </div>
+
+                            <div class="col-md-6">                        
+                                <div class="form-group">
+                                    <label>Komisyon Başkanı:</label>
+                                    <input type="text" class="form-control input-sm m-bot15" id="kmsynIkinciUye" name="KullaniciAdSoyad" disabled="disabled" value="@ViewBag.baskanUye">
+                                </div>
+                                <div class="form-group">
+                                    <label>Komisyon 1. Üye:</label>
+                                    <input type="text" class="form-control input-sm m-bot15" id="kmsynIkinciUye" name="KullaniciAdSoyad" disabled="disabled" value="@ViewBag.birinciUye">
+                                </div>
+                                <div class="form-group">
+                                    <label>Komisyon 2. Üye:</label>
+                                    <input type="text" class="form-control input-sm m-bot15" id="kmsynIkinciUye" name="KullaniciAdSoyad" disabled="disabled" value="@ViewBag.ikinciUye">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+                        <button class="btn btn-success rolGuncelle" type="submit"> Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                Kullanıcılar
+                <hr />
+                <a href="#ModalEkle" data-toggle="modal" class="btn btn-primary btn-sm modalEkle"><i class="icon-file"></i>   Yeni Kullanıcı</a>
+                <div class="btn-group">
+                    <button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle" type="button"> <i class=" icon-filter"></i>  Filtre  <span class="caret"></span></button>
+                    <ul role="menu" class="dropdown-menu">
+                        <li>@Html.ActionLink("Öğretim Elemanı", "Index", "Kullanicilar", new { filtreID = -1 }, null)</li>
+                        <li>@Html.ActionLink("Öğrenci", "Index", "Kullanicilar", new { filtreID = -2 }, null)</li>   
+                        <li>@Html.ActionLink("Tüm Kullanıcılar", "Index", "Kullanicilar", new { filtreID = 0 }, null)</li>
+                    </ul>
+                </div>
+                <input id="toastrText" type="hidden" value="@TempData["Text"]" name="toastrText" />
+                <input id="toastrType" type="hidden" value="@TempData["Durum"]" name="toastrType" />               
+            </header>
+            <div class="panel-body">
+                <div class="adv-table">
+                    <table class="table table-striped table-advance table-hover display" id="example">
+                        <thead>
+                            <tr>
+                                <th>Numara</th>
+                                <th>Ünvan</th>
+                                <th>Adı</th>
+                                <th>Soyadı</th>
+                                <th>Telefon</th>
+                                <th>Email</th>                            
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Kullanicilar k in ViewBag.Kullanicilar)
+                            {
+                                <tr>
+                                    <td>@k.KullaniciOkulNo</td>
+                                    @{ string unvan = "";
+                                        for (int i = 0; i < unv.unvanID.Length; i++)
+                                        {
+                                            if (k.KullaniciUnvanID == unv.unvanID[i])
+                                            {
+                                                unvan = unv.unvanAdi[i].ToString();
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    <td>@unvan</td>
+                                    <td>@k.KullaniciAdi</td>
+                                    <td>@k.KullaniciSoyadi</td>
+                                    <td>@k.KullaniciTlf</td>
+                                    <td>@k.KullaniciEMail</td>                                 
+                                    <td>                                       
+                                        <span data-toggle="modal" data-target="#ModalGuncelle">
+                                            <a href="#ModalGuncelle" class="btn btn-primary btn-xs tooltips modalKGuncelle" data-toggle="tooltip" data-placement="top" data-original-title="Güncelle" data-k_id="@k.KullaniciID" data-k_no="@k.KullaniciOkulNo" data-k_unvan_id="@k.KullaniciUnvanID" data-k_ad="@k.KullaniciAdi" data-k_soyad="@k.KullaniciSoyadi" data-k_telefon="@k.KullaniciTlf" data-email="@k.KullaniciEMail" data-sifre="@k.KullaniciSifre" data-adres="@k.KullaniciAdres"><i class="icon-pencil"></i></a>
+                                        </span>
+                                        <span data-toggle="modal" data-target="#modalSil">
+                                            <a hrefmodalSil class="btn btn-danger btn-xs tooltips modalKSil" data-toggle="tooltip" data-placement="top" data-original-title="Sil" data-k_id="@k.KullaniciID" data-k_adi="@k.KullaniciAdi" data-k_soyadi="@k.KullaniciSoyadi"><i class="icon-trash "></i></a>
+                                        </span>
+                                        @if (k.KullaniciUnvanID != 11)
+                                        {
+                                            <span data-toggle="modal" data-target="#ModalRol">
+                                                <a href="#ModalRol" class="btn btn-success btn-xs tooltips modalRol" data-toggle="tooltip" data-placement="top" data-original-title="Rol Tanımla" data-id="@k.KullaniciID" data-adi="@k.KullaniciAdi" data-soyadi="@k.KullaniciSoyadi" data-rolid="@k.KullaniciRolID"><i class="icon-group"></i></a>
+                                            </span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+    </div>
+    </section>
+</div>
+</div>
+
+@section scripts{
+<script src="~/Content/js/jquery-1.8.3.min.js"></script>
+<script src="~/Content/js/form-validation-script.js"></script>
+<script type="text/javascript" language="javascript" src="~/Content/assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
+<script src="~/Scripts/toastr.min.js"></script>
+@*<script src="~/Scripts/JavaScript.js"></script>*@
+
+    <script type="text/javascript" charset="utf-8">   
+
+        $(document).ready(function () {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            var text = document.getElementById("toastrText").value;          
+            var durum = document.getElementById("toastrType").value;
+
+            if (durum == "Sil") {
+                toastr.success("Kullanıcısı silindi...", text);
+            }
+            else if (durum == "Ekle") {
+                toastr.success("Kullanıcısı eklendi...", text);
+            }
+            else if (durum == "Güncelle") {
+                toastr.success("Kullanıcısı güncellendi...", text);
+            }
+            else if (durum == "Hata") {
+                toastr.error(text, "Hata");
+            }
+            else if (durum == "Rol Güncelle") {
+                toastr.success("Kullanıcısının rolü güncellendi...", text);
+            }
+            else if (durum == "Rol Güncelle-Uyarı") {
+                toastr.warning("Kullanıcısının rolü güncellendi...", textUyariHata);
+                toastr.success("Kullanıcısının rolü güncellendi...", text);
+            }
+
+          
+
+            $('#example').dataTable({
+                "aaSorting": [[4, "desc"]],
+                iDisplayLength: 25
+            });
+
+        });
+
+        $("#example").on("click", ".modalKGuncelle", function () {
+            var k_id = $(this).data("k_id");
+            var k_no = $(this).data("k_no");
+            var k_unvan_id = $(this).data("k_unvan_id");
+            var k_ad = $(this).data("k_ad");
+            var k_soyad = $(this).data("k_soyad");
+            var k_telefon = $(this).data("k_telefon");
+            var k_email = $(this).data("email");
+            var k_sifre = $(this).data("sifre");
+            var k_adres = $(this).data("adres");
+
+
+            $("#KullaniciIDG").val(k_id);
+            $("#kGNo").val(k_no);
+            $('#kGUnvanID').val(k_unvan_id);
+            $("#kGAdi").val(k_ad);
+            $("#kGSoyadi").val(k_soyad);
+            $("#kGTlf").val(k_telefon);
+            $("#Gemail").val(k_email);
+            $("#kGSifre").val(k_sifre);
+            $("#kGAdres").val(k_adres);
+        });
+
+        $("#example").on("click", ".modalKSil", function () {
+            var ad = $(this).data("k_adi");
+            var soyad = $(this).data("k_soyadi");
+
+            $(".modal-body>p.mesaj").html(ad + ' ' + soyad + " kullanıcısı silinsin mi?");
+
+            var id = $(this).data("k_id");
+            $(".kullaniciSil").data("id", id);
+        });
+
+        $("#example").on("click", ".modalRol", function () {
+            var id = $(this).data("id");
+            var adi = $(this).data("adi");
+            var soyadi = $(this).data("soyadi");
+            var rolid = $(this).data("rolid");
+
+            $(".rolGuncelle").data("id", id);
+
+
+            $("#KullaniciRID").val(id);
+            $("#kRAdiSoyadi").val(adi + ' ' + soyadi);
+            $('#KullaniciRolID').val(rolid);
+        });
+
+        //$(".modalKGuncelle").click(function () {
+        //    var k_id = $(this).data("k_id");
+        //    var k_no = $(this).data("k_no");
+        //    var k_unvan_id = $(this).data("k_unvan_id");
+        //    var k_ad = $(this).data("k_ad");
+        //    var k_soyad = $(this).data("k_soyad");
+        //    var k_telefon = $(this).data("k_telefon");
+        //    var k_email = $(this).data("email");
+        //    var k_sifre = $(this).data("sifre");
+        //    var k_adres = $(this).data("adres");
+
+
+        //    $("#KullaniciIDG").val(k_id);
+        //    $("#kGNo").val(k_no);   
+        //    $('#kGUnvanID').val(k_unvan_id);
+        //    $("#kGAdi").val(k_ad);
+        //    $("#kGSoyadi").val(k_soyad);
+        //    $("#kGTlf").val(k_telefon);
+        //    $("#Gemail").val(k_email);
+        //    $("#kGSifre").val(k_sifre);
+        //    $("#kGAdres").val(k_adres);
+           
+        //});
+
+        //$(".modalKSil").click(function () {
+        //    var ad = $(this).data("k_adi");
+        //    var soyad = $(this).data("k_soyadi");
+
+        //    $(".modal-body>p.mesaj").html(ad + ' ' + soyad + " kullanıcısı silinsin mi?");
+
+        //    var id = $(this).data("k_id");
+        //    $(".kullaniciSil").data("id", id);
+        //});
+
+        $(".modalRol").click(function () {
+            var id = $(this).data("id");
+            var adi = $(this).data("adi");
+            var soyadi = $(this).data("soyadi");
+            var rolid = $(this).data("rolid");
+
+            $(".rolGuncelle").data("id", id);
+
+
+            $("#KullaniciRID").val(id);
+            $("#kRAdiSoyadi").val(adi + ' ' + soyadi);
+            $('#KullaniciRolID').val(rolid);
+
+        });
+
+        $(".kullaniciSil").click(function () {
+            var id = $(this).data("id");
+            var dersadi = $(this).data("dersadi");
+
+            $.ajax({
+                type: "POST",
+                url: "/Kullanicilar/Sil",
+                data: { "ID": id },
+                success: function (durum) {
+                    if (durum == "başarılı") {
+                        window.location.replace("/Kullanicilar/Index");
+                    }
+                    else if (durum == "hata") {
+                        $(".modal-body>p.hata").html("Silme anında bir hata oluştu");
+                    }
+                    else if (durum == "silinemez") {
+                        $(".modal-body>p.hata").html("Bu öğrenciye ait başvuru bulunuyor !");
+                    }
+                }
+            });
+        });
+
+      
+
+        //$(".rolGuncelle").click(function () {
+        //    var id = $(this).data("id");            
+        //    var rolid = $('#KullaniciRolID').val();
+
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "/Kullanicilar/RolGuncelle",
+        //        data: { "ID": id, "RolID": rolid },
+        //        success: function (durum) {
+        //            if (durum == "başarılı") {
+        //                window.location.replace("/Kullanicilar/Index");
+        //            }
+        //            else {
+        //                $(".modal-body>p.hata").html("Silme anında bir hata oluştu");
+        //            }
+        //        }
+        //    });
+        //});
+
+        $("#kUnvanID").change(function () {
+            if ($(this).val()==11) {
+                $("#sifreGrup").hide();           
+                $("#lblNo").text("Okul No:");
+                $("#kNo").attr("placeholder", "Okul no giriniz").blur();
+                $("#kSifre").val("0");
+            }
+            else {
+                $("#sifreGrup").show();
+                $("#lblNo").text("Sicil No:");
+                $("#kNo").attr("placeholder", "Sicil no giriniz").blur();
+                $("#kSifre").val("");
+            }
+           
+        });
+
+        $("#kGUnvanID").change(function () {
+            if ($(this).val() == 11) {
+                $("#sifreGroup").hide();
+                $("#lblNu").text("Okul No:");
+                $("#kGNo").attr("placeholder", "Okul no giriniz").blur();
+                $("#kGSifre").val("0");
+            }
+            else {
+                $("#sifreGroup").show();
+                $("#lblNu").text("Sicil No:");
+                $("#kGNo").attr("placeholder", "Sicil no giriniz").blur();
+                $("#kGSifre").val("");
+            }
+
+        });
+
+        //$(".kKaydet").click(function () {
+
+        //    //$("#KEkle").validate({
+        //    //    // Specify validation rules
+        //    //    rules: {
+        //    //        // The key name on the left side is the name attribute
+        //    //        // of an input field. Validation rules are defined
+        //    //        // on the right side
+        //    //        kNo: "required",
+        //    //        kUnvanID: "required",
+        //    //        kAdi: "required",
+        //    //        kSoyadi: "required",
+        //    //        kTlf: "required",
+        //    //        email: {
+        //    //            required: true,
+        //    //            // Specify that email should be validated
+        //    //            // by the built-in "email" rule
+        //    //            email: true
+        //    //        },
+        //    //        kSifre: {
+        //    //            required: true,
+        //    //            minlength: 5
+        //    //        }
+        //    //    },
+        //    //    // Specify validation error messages
+        //    //    messages: {
+        //    //        kNo: "Lütfen öğrenci numarasını giriniz.",
+        //    //        kUnvanID: "Lütfen ünvan seçiniz.",
+        //    //        kAdi: "Lütfen kullanıcı adı giriniz",
+        //    //        kSoyadi: "Lütfen kullanıcı soyadı giriniz",
+        //    //        kTlf: "Lütfen kullanıcı telefonunu giriniz",
+        //    //        email: "Please enter a valid email address",
+        //    //        kSifre: {
+        //    //            required: "Bir şifre giriniz",
+        //    //            minlength: "En az 5 karakter olmalı"
+        //    //        }
+        //    //    },
+        //    //    // Make sure the form is submitted to the destination defined
+        //    //    // in the "action" attribute of the form when valid
+        //    //    submitHandler: function (form) {
+        //    //        form.submit();
+        //    //    }
+        //    //});
+
+        //      var kulNo = $("#kNo").val();
+        //      var kulUnvanId = $("#kUnvanID").val();
+        //      var kulAdi = $("#kAdi").val();
+        //      var kulSoyAdi = $("#kSoyadi").val();
+        //      var kulTlf = $("#kTlf").val();
+        //      var kulEmail = $("#email").val();
+        //      var kulSifre = $("#kSifre").val();
+        //      var kulAdres = $("#kAdres").val();
+
+        //      $.ajax({
+        //          type: "POST",
+        //          url: "/Kullanicilar/Ekle/",
+        //          data: {
+        //              KullaniciOkulNo: kulNo,
+        //              KullaniciUnvanID: kulUnvanId,
+        //              KullaniciAdi: kulAdi,
+        //              KullaniciSoyadi: kulSoyAdi,
+        //              KullaniciTlf: kulTlf,
+        //              KullaniciEMail: kulEmail,
+        //              KullaniciSifre: kulSifre,
+        //              KullaniciAdres: kulAdres
+        //          },
+        //          success: function () {                      
+        //          }
+        //      });
+        //  });
+</script>
+
+<script type="text/javascript" src="~/Content/assets/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+<script src="~/Content/js/form-validation-script.js"></script>
+    }
+

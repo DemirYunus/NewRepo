@@ -1,0 +1,574 @@
+﻿
+@{
+    ViewBag.Title = "MUAF || İçerik Değerlendirme";
+}
+@using Muafiyet.Models
+@using Muafiyet.App_Classes
+@model List<IcerikKararlari>
+
+@section head{
+
+
+
+    <link rel="stylesheet" type="text/css" href="/Content/assets/gritter/css/jquery.gritter.css" />
+    <link href="/Content/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/Content/assets/bootstrap-fileupload/bootstrap-fileupload.css" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <link rel="stylesheet" type="text/css" href="/Content/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css" />
+<link href="~/Content/toastr.css" rel="stylesheet" />
+    <link href="/css/MyStyle.css" rel="stylesheet" />
+    <style> 
+        
+        .my_class {
+background-color:lightgray;
+}
+    
+      .t {
+        white-space: pre-wrap; /* css-3 */
+        white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        word-wrap: break-word; /* Internet Explorer 5.5+ */
+        overflow-wrap: break-word;
+      }
+        </style>
+}
+
+<div class="modal fade" id="ModalIcerikGoster" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="/DersIcerikleri/Ekle" method="post" role="form">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Ders İçeriği</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a target="_blank" id="link" href="" data-toggle="modal" class="btn btn-primary btn-sm modalEkle"><i class="icon-link"></i>  İçerik Linki</a>
+                            <a id="resim" target="_blank" href="" data-toggle="modal" class="btn btn-info btn-sm"><i class="icon-picture"></i>  İçerik Resmi</a>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <textarea disabled="disabled" id="IcerikMetni" class="form-control ckeditor" name="IcerikNotu" rows="6" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="modal-footer">                        
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalKarar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">İçerik Değerlendir</h4>
+            </div>
+            <div class="modal-body">
+               
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="control-label" style="margin-bottom:-5px;">Ders:</label>
+                                <p class="help-block">(@ViewBag.MevcutUni)</p>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control input-sm m-bot15" id="DersAta" readonly>             
+                            </div>
+                        </div>
+                        </div>
+                <hr style="border-top: 1px solid #00A8B3;"/>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="control-label">Üniversite:</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control input-sm m-bot15" id="Uni" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="control-label">Fakülte:</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control input-sm m-bot15" id="fkt" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="control-label">Bölüm:</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control input-sm m-bot15" id="blm" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="control-label" style="margin-bottom:-5px;">Ders:</label>
+                                <p class="help-block">(@ViewBag.KarsiUni)</p>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control input-sm m-bot15" id="dersKarsi" readonly>
+                            </div>
+                        </div>
+                    </div>
+             
+            </div>
+            <div class="modal-footer">               
+                <button class="btn btn-success basvuruUygun" type="button"> Uygun</button>
+                <button class="btn btn-danger basvuruUygunDegil" type="button"> Uygun Değil</button>
+                <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                İçerik Karaları &nbsp;&nbsp;&nbsp;
+
+                <div class="btn-group">
+                    <button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle" type="button"> <i class=" icon-filter"></i>  Filtre  <span class="caret"></span></button>
+                    <ul role="menu" class="dropdown-menu">
+                        <li>@Html.ActionLink("Değerlendirilmeyenler", "GetirIcerikDegelendirme", "DersIcerikleri", new { filtreID = -1 }, null)</li>                       
+                        <li>@Html.ActionLink("Tümü", "GetirIcerikDegelendirme", "DersIcerikleri", new { filtreID = 0 }, null)</li>
+                    </ul>
+                </div>
+
+                &nbsp;&nbsp;               
+                <button id="btnUyar" onclick="uyar()" class="btn btn-warning uyeUyar btn-sm" type="button" data-loading-text="Gönderiliyor..."><i class="icon-envelope"></i>&nbsp;  Üyeleri Uyar</button>             
+
+                <input id="toastrText" type="hidden" value="@TempData["Text"]"  name="toastrText" />
+                <input id="toastrType" type="hidden" value="@TempData["Durum"]"  name="toastrType" />                 
+             </header>
+            <div class="panel-body">
+                <div class="adv-table">
+                    <table class="table table-striped table-advance table-hover display" id="example">
+                        <thead>
+                            <tr>
+                                <th>Ders (@ViewBag.MevcutUni)</th>
+                                <th>Üniversite</th>
+                                <th>Fakülte</th>
+                                <th>Bölüm</th>
+                                <th>Ders</th>
+                                <th>1. Üye</th>
+                                <th>2. Üye</th>
+                                <th>3. Üye</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ List<IcerikKararlari> listGruplu = null; int grupNo = -1;}                            
+                            @foreach (IcerikKararlari di in Model)
+                            {
+                                if (grupNo != di.CokluGrupID)
+                                {
+                                <tr>
+                                    <td class="t" style="width:22%;">@di.DersIcerikleri.AlinanDersAdi</td>                                
+                                    <td class="t" style="width:10%;">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(di.DersIcerikleri1.Universiteler.Universite.ToString().Split(new[] { " ÜNİ" }, StringSplitOptions.None)[0].ToLower())</td>
+                                    @{ string fkl = "";}
+                                    @foreach ( Fakulteler ff in Data.Fakulte)
+                                    {
+                                        if (di.DersIcerikleri1.AlinanFakulteID ==ff.FakulteID)
+                                        {
+                                            fkl = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(ff.Fakulte.ToLower());
+                                            break;
+                                        }
+                                    }
+                                    <td class="t" style="width:10%;">@fkl.ToString().Split(new[] { " Fakül" }, StringSplitOptions.None)[0]</td>
+                                    @{ string bl = "";}
+                                    @foreach (Bolumler bb in Data.Bolum)
+                                    {
+                                        if (di.DersIcerikleri1.AlinanBolumID ==bb.BolumID)
+                                        {
+                                            bl = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(bb.Bolum.ToLower());
+                                            break;
+                                        }
+                                    }                                   
+                                    <td class="t" style="width:13%;">@bl</td>
+                                    @if (@di.CokluGrupID > 0)
+                                    {
+                                        string dersAdi = "";
+                                        listGruplu = Model.Where(x => x.CokluGrupID == di.CokluGrupID).ToList();
+                                        foreach (IcerikKararlari item in listGruplu)
+                                        {
+                                            dersAdi = dersAdi + item.DersIcerikleri1.AlinanDersAdi.ToString() + "\n";
+                                        }
+                                        <td class="t" style="width:22%;">@dersAdi</td>
+
+                                        grupNo = (int)di.CokluGrupID;
+                                    }
+                                    else
+                                    {
+                                        <td class="t" style="width:22%;">@di.DersIcerikleri1.AlinanDersAdi</td>
+                                    }
+
+                                    @if (di.KararUye1 == 0)
+                                    {
+                                        <td style="width:5%;">
+                                            <span class="label label-warning label-mini">Belirsiz</span>
+                                        </td>
+                                    }
+                                    else if (di.KararUye1 == 1)
+                                    {
+                                        <td  style="width:5%;">
+                                            <span class="label label-success label-mini">Uygun</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td style="width:5%;">
+                                            <span class="label label-danger label-mini">Uygun Değil</span>
+                                        </td>
+                                    } 
+                                    @if (di.KararUye2 == 0)
+                                    {
+                                        <td style="width:5%;">
+                                            <span class="label label-warning label-mini">Belirsiz</span>
+                                        </td>
+                                    }
+                                    else if (di.KararUye2 == 1)
+                                    {
+                                        <td style="width:5%;">
+                                            <span class="label label-success label-mini">Uygun</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td  style="width:5%;">
+                                            <span class="label label-danger label-mini">Uygun Değil</span>
+                                        </td>
+                                    } 
+                                    @if (di.KararUye3 == 0)
+                                    {
+                                        <td style="width:5%;">
+                                            <span class="label label-warning label-mini">Belirsiz</span>
+                                        </td>
+                                    }
+                                    else if (di.KararUye3 == 1)
+                                    {
+                                        <td style="width:5%;">
+                                            <span class="label label-success label-mini">Uygun</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td style="width:5%;">
+                                            <span class="label label-danger label-mini">Uygun Değil</span>
+                                        </td>
+                                    }  
+                                    <td style="width:8%;">
+                                        <span data-toggle="modal" data-target="#ModalIcerikGoster">
+                                            <a href="#ModalIcerikGoster" class="btn btn-default btn-xs tooltips modalIcerikAc" data-toggle="tooltip" data-placement="top" data-original-title="İçerik" data-id="@di.DersIcerikleri1.AlinanDersID" data-link="@di.DersIcerikleri1.IcerikLinki" data-resim="@di.DersIcerikleri1.IcerikResimYolu" data-metin="@di.DersIcerikleri1.IcerikNotu"><i class="icon-info-sign"></i></a>
+                                        </span>
+                                        <span data-toggle="modal" data-target="#ModalKarar">
+                                            <a href="#ModalKarar" class="btn btn-primary btn-xs tooltips modalKararAc" data-toggle="tooltip" data-placement="top" data-original-title="Değerlendir" data-id="@di.ID" data-dersata="@di.DersIcerikleri.AlinanDersAdi" data-uni="@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(di.DersIcerikleri1.Universiteler.Universite.ToLower())" data-fkt="@fkl" data-blm="@bl" data-ders="@di.DersIcerikleri1.AlinanDersAdi" ><i class="icon-question-sign"></i></a>
+                                        </span>
+                                        
+                                    </td>
+                                 
+                                </tr>
+                                            }
+                                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section scripts{
+
+<script src="~/Content/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" language="javascript" src="~/Content/assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
+<script class="include" type="text/javascript" src="~/Content/js/jquery.dcjqaccordion.2.7.js"></script>
+
+   
+    @*<script src="~/Content/js/jquery-ui-1.9.2.custom.min.js"></script>*@
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>*@
+   @* <script src="~/Content/js/jquery.js"></script>*@ 
+    @*<script src="~/Content/js/bootstrap.min.js"></script>*@ 
+
+    <script type="text/javascript" src="/Content/assets/ckeditor/ckeditor.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+
+
+@*<script src="~/Scripts/JavaScript.js"></script>*@
+
+    <script>   
+
+        $(document).ready(function () {
+
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            var text = document.getElementById("toastrText").value;
+            var durum = document.getElementById("toastrType").value;
+
+            if (durum == "Kabul") {
+                toastr.success(text, "Kabul");
+            }
+            else if (durum == "Red") {
+                toastr.error(text, "Red");
+            }
+
+            $('#example').dataTable({
+                "aaSorting": [[8, "desc"]]
+                //"aoColumnDefs": [{ "sClass": "my_class", "aTargets": [0] }]
+            });
+        });
+
+        $(".basvuruUygun").click(function () {
+            var id = $(this).data("id");
+            var ders = $(this).data("ders");
+
+            $.ajax({
+                type: "POST",
+                url: "/DersIcerikleri/Uygun",
+                data: { ID: id },
+                success: function () {
+                    window.location.replace("/DersIcerikleri/GetirIcerikDegelendirme");
+
+                }
+            });
+        });
+
+        $(".basvuruUygunDegil").click(function () {
+            var id = $(this).data("id");
+            $.ajax({
+                type: "POST",
+                url: "/DersIcerikleri/UygunDegil",
+                data: { ID: id },
+                success: function () {                   
+                        window.location.replace("/DersIcerikleri/GetirIcerikDegelendirme");                    
+                }
+            });
+        });
+
+        $("#example").on("click", ".modalIcerikAc", function () {
+            var Link = $(this).data("link");
+            var Resim = $(this).data("resim");
+            var ID = $(this).data("id");
+            var metin = $(this).data("metin");
+
+            $("#link").data("link", Link);
+            $("#resim").data("resim", Resim);
+
+            $("#IcerikMetni").val(metin);
+
+            CKEDITOR.instances.IcerikMetni.setData(metin);
+
+            $("#resim").data("id", ID);
+
+            if (Link == null || Link == '') {
+                $("#link").attr("disabled", true);
+            }
+            else {
+                $("#link").attr("href", Link);
+            }
+
+            if (Resim == null || Resim == '') {
+                $("#resim").attr("disabled", true);
+            }
+            else {
+                $("#resim").attr("href", "/IcerikResmi/Index/" + ID);
+            }
+        });
+
+        $("#example").on("click", ".modalKararAc", function () {
+            var dersAta = $(this).data("dersata");
+            var universite = $(this).data("uni");
+            var fakulte = $(this).data("fkt");
+            var bolum = $(this).data("blm");
+            var dersKarsi = $(this).data("ders");
+            var kararID = $(this).data("id");
+            var Link = $(this).data("link");
+            var Resim = $(this).data("resim");
+
+            $("#DersAta").val(dersAta);
+            $("#Uni").val(universite);
+            $("#fkt").val(fakulte);
+            $("#blm").val(bolum);
+            $("#dersKarsi").val(dersKarsi);
+
+
+            //Class ı .modal-body olan elemanın p lerden mesaj class lıya yaz
+
+            $(".basvuruUygun").data("id", kararID);
+            $(".basvuruUygun").data("ders", dersKarsi);
+
+            $(".basvuruUygunDegil").data("id", kararID);
+            $(".basvuruUygunDegil").data("ders", dersKarsi);
+
+            $("#link").data("link", Link);
+            $("#resim").data("resim", Resim);
+            //Clası tedSil olan elemana data-id="id" yazdırıyor. Dinamik olarak.
+            //Table daki sil butonuna tıklanınca modaldaki Evet butonuna ID aktarıyoruz.
+        });
+
+        //$(".modalIcerikAc").click(function () {
+
+        //    var Link = $(this).data("link");
+        //    var Resim = $(this).data("resim");
+        //    var ID = $(this).data("id");
+        //    var metin = $(this).data("metin");
+
+        //    $("#link").data("link", Link);
+        //    $("#resim").data("resim", Resim);
+            
+        //    $("#IcerikMetni").val(metin);
+        //    CKEDITOR.instances.IcerikMetni.setData(metin);
+        //    $("#resim").data("id", ID);
+
+        //    if (Link==null || Link=='') {
+        //        $("#link").attr("disabled", true);
+        //    }
+        //    else {
+        //        $("#link").attr("href", Link);
+        //    }
+         
+        //    if (Resim == null || Resim=='') {
+        //        $("#resim").attr("disabled", true);
+        //    }
+        //    else {
+        //        $("#resim").attr("href", "/IcerikResmi/Index/" + ID);
+        //    }
+            
+        //});
+
+        //$(".modalKararAc").click(function () {
+        //    var dersAta = $(this).data("dersata");
+        //    var universite = $(this).data("uni");
+        //    var fakulte = $(this).data("fkt");
+        //    var bolum = $(this).data("blm");
+        //    var dersKarsi = $(this).data("ders");
+        //    var kararID = $(this).data("id");
+        //    var Link = $(this).data("link");
+        //    var Resim = $(this).data("resim");
+
+        //    $("#DersAta").val(dersAta);
+        //    $("#Uni").val(universite);
+        //    $("#fkt").val(fakulte);
+        //    $("#blm").val(bolum);
+        //    $("#dersKarsi").val(dersKarsi);
+
+
+        //    //Class ı .modal-body olan elemanın p lerden mesaj class lıya yaz
+
+        //    $(".basvuruUygun").data("id", kararID);
+        //    $(".basvuruUygun").data("ders", dersKarsi);
+
+        //    $(".basvuruUygunDegil").data("id", kararID);
+        //    $(".basvuruUygunDegil").data("ders", dersKarsi);
+
+        //    $("#link").data("link", Link);
+        //    $("#resim").data("resim", Resim);         
+        //    //Clası tedSil olan elemana data-id="id" yazdırıyor. Dinamik olarak.
+        //    //Table daki sil butonuna tıklanınca modaldaki Evet butonuna ID aktarıyoruz.
+        //});
+
+        CKEDITOR.replace('IcerikMetni', {
+
+            // Remove some plugins that would conflict with the bottom
+            // toolbar position.
+            removePlugins: 'link, about, insert'
+        });
+
+        function uyar() {
+            //alert("dhzfh");           
+
+            $('#btnUyar').button('loading');
+
+            $.ajax({
+                type: "POST",
+                url: "/DersIcerikleri/UyeUyar",
+                //data: { ID: id },
+                success: function (durum) {
+                    toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                    if (durum == "başarılı") {
+                        toastr.success("Üyelere uyarı maili  gönderildi...", "Başarılı");
+                    }
+                    else {
+                        toastr.error("Mail gönderilemedi", "Başarısız");
+                    }
+                    $('#btnUyar').button('reset');
+                },
+                error: function () {
+                    toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    } 
+                    toastr.error("Mail gönderilemedi", "Başarısız");
+                    $('#btnUyar').button('reset');
+                }
+            });
+        }
+       
+</script>
+}
+

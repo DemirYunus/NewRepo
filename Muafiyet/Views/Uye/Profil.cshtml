@@ -1,0 +1,220 @@
+﻿
+@{
+    ViewBag.Title = "MUAF || Profil";
+}
+@using Muafiyet.Models
+@using Muafiyet.App_Classes
+
+@section head{
+<link href="~/Content/toastr.css" rel="stylesheet" />
+<link href="~/Content/css/style.css" rel="stylesheet">
+<link href="~/Content/css/style-responsive.css" rel="stylesheet" />
+    }
+
+
+<div class="row">
+    <aside class="profile-nav col-lg-3">
+        <section class="panel">
+            <input id="toastrText" type="hidden" value="@TempData["Text"]" name="toastrText" />
+            <input id="toastrType" type="hidden" value="@TempData["Durum"]" name="toastrType" /> 
+            <div class="user-heading round">
+                <a href="#">
+                    <img src="img/profile-avatar.jpg" alt="">
+                </a>
+                <h1>@UyeInfo.KullaniciAdi @UyeInfo.KullaniciSoyadi</h1>
+                <p>@UyeInfo.KullaniciEMail</p>
+            </div>
+            <ul class="nav nav-pills nav-stacked">
+                <li class="active"><a href="profile-edit.html"> <i class="icon-edit"></i> Profili Düzenle</a></li>
+                <li><a href="profile-activity.html"> <i class="icon-calendar"></i> Bildirimler <span class="label label-danger pull-right r-activity">9</span></a></li>             
+            </ul>
+        </section>
+    </aside>
+    <aside class="profile-info col-lg-9">
+        <section>
+            <div class="panel panel-primary">
+                <div class="panel-heading"> Kişisel Bilgiler</div>
+                <div class="panel-body">
+                    <form id="loginForm" class="form-horizontal" role="form" method="post" action="/Uye/ProfilGuncelle">
+                        <input type="hidden" id="KullaniciID" name="KullaniciID" required="required" value="@UyeInfo.KullaniciID"/>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Ünvan:</label>
+                            <div class="col-lg-6">
+                                <select name="KullaniciUnvanID" id="kUnvanID" class="form-control" required="required">
+                                    <option value="">Ünvan Seçiniz</option>
+                                    @{Unvanlar unv = new Unvanlar();}
+                                    @for (int i = 0; i < unv.unvanAdi.Length; i++)
+                                    {
+                                        if (UyeInfo.Unvan == unv.unvanAdi[i])
+                                        {
+                                            <option selected="selected" value="@unv.unvanID[i]">@unv.unvanAdi[i]</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@unv.unvanID[i]">@unv.unvanAdi[i]</option>
+                                        }
+
+                                    }
+                                </select>
+                            </div>
+                            </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Ad:</label>
+                            <div class="col-lg-6">
+                                <input type="text" class="form-control" id="KullaniciAdi" name="KullaniciAdi" required="required" value="@UyeInfo.KullaniciAdi">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Soyad:</label>
+                            <div class="col-lg-6">
+                                <input type="text" class="form-control" id="KullaniciSoyadi" name="KullaniciSoyadi" required="required" value="@UyeInfo.KullaniciSoyadi">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Yetki:</label>
+                            <div class="col-lg-6">
+                                <select name="KullaniciRolID" id="KullaniciRolID" class="form-control" disabled="disabled">
+                                    <option value="">Rol Seçiniz</option>
+                                    @*@foreach (Roller r in ViewBag.Roller)
+                                    {
+                                        <option value="@r.RolID">@r.Rol</option>
+                                    }*@
+                                    @{ Rollar r = new Rollar();}
+                                    @for (int i = 0; i < r.Rol.Length; i++)
+                                    {
+                                        if (UyeInfo.RolID == r.RolID[i])
+                                        {
+                                            <option selected="selected" value="@r.RolID[i]">@r.Rol[i]</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@r.RolID[i]">@r.Rol[i]</option>
+                                        }                                       
+                                    }
+                                </select>
+                            </div>
+                            </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Email:</label>
+                            <div class="col-lg-6">
+                                <input type="email" class="form-control" id="KullaniciEMail" required="required" name="KullaniciEMail" value="@UyeInfo.KullaniciEMail">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Cep Telefon:</label>
+                            <div class="col-lg-6">
+                                <input type="text" data-mask="(999) 999-9999" class="form-control" id="kTlf"  required="required" name="KullaniciTlf" value="@UyeInfo.KullaniciTlf">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Dahili:</label>
+                            <div class="col-lg-6">
+                                <input type="text" class="form-control" id="KullaniciDahili" name="KullaniciDahili" value="@UyeInfo.KullaniciDahili">
+                            </div>
+                        </div>                        
+                        <div class="form-group">
+                            <div class="col-lg-offset-2 col-lg-10">
+                                <button type="submit" class="btn btn-success">Kaydet</button>
+                                <button type="button" class="btn btn-default">İptal</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <div class="panel panel-primary">
+                <div class="panel-heading"> Şifre Değiştir</div>
+                <div class="panel-body">
+                    <form class="cmxform form-horizontal tasi-form" role="form" method="post" action="/Uye/SifreGuncelle">
+                        <input type="hidden" id="KullaniciID" name="KullaniciID" required="required" value="@UyeInfo.KullaniciID" />
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Mevcut Şifre</label>
+                            <div class="col-lg-6">
+                                <input type="password" class="form-control" id="c-pwd" name="mevcutSifre" required="required">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Yeni Şifre</label>
+                            <div class="col-lg-6">
+                                <input type="password" class="form-control" id="password" name="KullaniciSifre" required="required">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Yeni Şifre (Tekrar)</label>
+                            <div class="col-lg-6">
+                                <input type="password" class="form-control" id="confirm_password" placeholder=" " required="required">
+                            </div>
+                        </div>                                                
+                        <div class="form-group">
+                            <div class="col-lg-offset-2 col-lg-10">
+                                <button type="submit" class="btn btn-success" onclick="return Validate()">Kaydet</button>
+                                <button type="button" class="btn btn-default">İptal</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </aside>
+</div>
+
+@section scripts{
+<script type="text/javascript" src="~/Content/assets/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+<script src="~/Scripts/toastr.min.js"></script>
+<script type="~/Content/text/javascript" src="js/jquery.validate.min.js"></script>
+<script src="~/Content/js/form-validation-script.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+
+    function Validate() {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirm_password").value;
+        if (password != confirmPassword) {
+            alert("Şifre eşleşmiyor !");
+            return false;
+        }
+        return true;
+    }
+
+
+
+        $(document).ready(function () {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            var text = document.getElementById("toastrText").value;
+            var durum = document.getElementById("toastrType").value;
+
+            if (durum == "Profil") {
+                toastr.success("Profiliniz güncellendi", "Başarılı");
+            }
+            else if (durum == "Şifre") {
+                toastr.success("Şifreniz Güncellendi", "Başarılı");
+            }
+            else if (durum == "Güncelle") {
+                toastr.success("Dersi güncellendi...", text);
+            }
+            else if (durum == "HataMevcutSifre") {
+                toastr.error(text, "Hata");
+            }
+        });
+         
+</script>
+}

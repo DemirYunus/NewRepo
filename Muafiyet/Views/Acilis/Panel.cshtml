@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "MUAFF || Panel";
+}
+
+@section head{
+    <style>
+        .btn{
+            width:300px;
+            height:300px;
+        }
+    </style>
+  }
+
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                PANEL
+                <hr />
+                <div class="row">
+                    <div style="text-align:center;" class="col-md-3">
+                        <a style="padding:40px;" href="/Basvurular/Index" class="btn btn-primary btn-xs tooltips" data-toggle="tooltip" data-placement="top" data-original-title="Muafiyet Başvuru Girişi"><i class="icon-leaf"  style="font-size:200px; color:white;"></i></a>
+                        <div  style="font-size:20px; font-weight:bold;">Muafiyet Başvuru Girişi</div>                        
+                    </div>
+                    <div style="text-align:center;" class="col-md-3">
+                        <a style="padding:40px;" href="/Basvurular/Denklik" class="btn btn-warning btn-xs tooltips" data-toggle="tooltip" data-placement="top" data-original-title="Yaz Okulu Başvuru Girişi"><i class="icon-sun" style="font-size:200px;color:white;"></i></a>   
+                        <div  style="font-size:20px; font-weight:bold;">Yaz Okulu Başvuru Girişi</div>                     
+                    </div>
+                    <div style="text-align:center;" class="col-md-3">
+                        <a style="padding:40px;" href="/DersIcerikleri/GetirIcerikDegelendirme" class="btn btn-success btn-xs tooltips" data-toggle="tooltip" data-placement="top" data-original-title="Komisyon Değerlendirmesi"><i class="icon-thumbs-up " style="font-size:200px;color:white;"></i></a>   
+                        <div style="font-size:20px; font-weight:bold;">Komisyon Değerlendirmesi</div>                     
+                    </div>
+                </div>
+                  
+
+</header>
+            <div class="panel-body">
+                
+            </div>
+        </section>
+    </div>
+</div>
+
+
+@section scripts{
+<script src="~/Content/js/jquery-1.8.3.min.js"></script>
+    }
+  
+
+  
+

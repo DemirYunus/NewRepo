@@ -1,0 +1,174 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Mosaddek">
+    <meta name="keyword" content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+
+
+    <link rel="shortcut icon" href="~/Content/img/cloudicon.png">
+    <title>MUAF || Üye Girişi</title>
+    <!-- Bootstrap core CSS -->
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/css/bootstrap-reset.css" rel="stylesheet">
+    <!--external css-->
+    <link href="~/Content/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="~/Content/css/style.css" rel="stylesheet">
+    <link href="~/Content/css/style-responsive.css" rel="stylesheet" />
+    <link href="~/css/MyStyle.css" rel="stylesheet" />
+
+    <style>
+        .login-body {
+            background-image: url('../../Content/img/cloudInvers.png');
+            background-size:100%;
+        }
+
+          .hata {
+               font-size:12px;
+               float:right;    
+        }
+          .gonderildi
+          {
+                font-size:12px;
+               float:right; 
+          }
+    </style>
+
+</head>
+
+
+
+<body class="login-body">
+
+    <div class="container">
+        <header class="header">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!--logo start-->
+                <a  style="color:black;" href="/Acilis/index" class="logo">Mu<span>Aff</span></a>
+                <!--logo end-->
+                 </div>         
+        </header>
+
+        <!-- Modal -->
+        <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    
+                       
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Şifremi Unuttum</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Şifreyi sıfırlamak için e-mail adresinizi giriniz.</p>
+
+                                <input id="emailSifir" type="email" name="emailSifir" placeholder="Email adresiniz" autocomplete="off" class="form-control placeholder-no-fix" >
+
+                                <br />
+                                <p class=" label label-danger hata"></p>
+                                <p class=" label label-success gonderildi"></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+                                <button class="btn btn-success" id="sifreDegiss" onclick="sifirla($('#emailSifir').val())" type="button" data-loading-text="Gönderiliyor...">Gönder</button>
+                            </div>          @*onclick="sifirla($('#email').val())"*@
+                       
+                   
+                </div>
+                </div>
+        </div>
+        <!-- modal -->
+
+        <form style="background-color:white;" class="form-signin" method="post" action="/Uye/GirisYap">
+            <h2 style="background-color:#1da1f2;" class="form-signin-heading">Giriş Yapınız</h2>
+            <div class="login-wrap">
+                <input type="text" value="" class="form-control" name="KullaniciEMail" placeholder="Email" autofocus>
+                <input type="password" class="form-control" name="KullaniciSifre" placeholder="Şifre">
+                <label class="checkbox">
+                    <input type="checkbox" name="Hatirla"> Hatırla
+                    <span class="pull-right">
+                        <a data-toggle="modal" href="#myModal"> Şifremi unuttum</a>
+                    </span>
+                </label>
+                <button id="btnGiris" style="background-color:#1da1f2; color:white;" class="btn btn-lg btn-block" name="submit" type="submit" data-loading-text="Yükleniyor...">Giriş</button> 
+                <div style="margin-top:5px;"  class="registration">
+                    Henüz üye değil misiniz?
+                    <a style="float:right; margin-right:5px; "   class="" href="/Uye/UyeOl">Üyelik oluştur</a>
+                </div>
+                @if (ViewBag.Mesaj != null)
+                {
+                    <div class="alert alert-block alert-danger fade in">
+                        <strong>DİKKAT!</strong> @ViewBag.Mesaj
+                    </div>
+                }               
+            </div>       
+
+        </form>
+       
+    </div>
+
+    <!-- js placed at the end of the document so the pages load faster -->
+
+    <script src="~/Content/js/jquery-1.8.3.min.js"></script> 
+    <script src="~/Content/js/jquery.js"></script> 
+    <script src="~/Content/js/bootstrap.min.js"></script>   
+    
+    @*<script src="~/Content/js/form-validation-script.js"></script>*@
+    @*<script src="~/Scripts/JavaScript.js"></script>*@
+
+    <script type="text/javascript">
+
+        $('#btnGiris').on('click', function () {
+            var $this = $(this);
+            $this.button('loading');
+        
+        });
+     
+        function sifirla(email) {
+
+            $('#sifreDegiss').button('loading');
+
+            $.ajax({
+                type: "POST",
+                url: "/Uye/SifreSifirla",
+                data: { "email": email },
+                success: function (durum) {
+                    if (durum == "başarılı") {
+                        //window.location.replace("/Uye/GirisYap");
+                        $(".modal-body>p.gonderildi").html("Yeni şifreniz belittiğiniz email adresine gönderildi.");
+                        $('#sifreDegiss').button('reset');
+                    }
+                    else if (durum == "hata") {
+                        $(".modal-body>p.hata").html("Email hatalı veya internet bağlantısı koptu.");
+                        $('#sifreDegiss').button('reset');
+                    }
+                    else if (durum == "kayitliDegil") {
+                        $(".modal-body>p.hata").html("Böyle bir email adresi kayıtlı değil");
+                        $('#sifreDegiss').button('reset');
+                    }
+                },
+                error: function () {
+                    alert("Bir Hata Oluştu !");
+                }
+            });
+
+            
+        }
+      
+    </script>
+
+</body>
+</html>

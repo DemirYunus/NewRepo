@@ -1,0 +1,168 @@
+﻿
+@{
+    Layout = null;
+}
+@using Muafiyet.Models
+@using Muafiyet.App_Classes
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Mosaddek">
+    <meta name="keyword" content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+
+    <link rel="shortcut icon" href="~/Content/img/cloudicon.png">
+
+    <title>MUAF || Üye Kayıt</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/Content/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/Content/css/bootstrap-reset.css" rel="stylesheet">
+    <!--external css-->
+    <link href="/Content/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="/Content/css/style.css" rel="stylesheet">
+    <link href="/Content/css/style-responsive.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <link href="/css/MyStyle.css" rel="stylesheet" />
+
+    <style>
+        .login-body {          
+            background-image: url('../../Content/img/cloudInvers.png');
+            background-size: 100%;
+        }
+     
+
+    </style>
+ 
+</head>
+<body class="login-body">
+    <div class="container">
+        <header class="header ">
+            @*white-bg*@
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!--logo start-->
+            <a style="color:black;" href="/Acilis/index" class="logo">Mu<span>Aff</span></a>
+            <!--logo end-->
+
+
+        </div>
+    </header>
+    <form style="background-color:white;" class="form-signin" action="/Uye/UyeOl" method="post">
+        <h2 style="background-color:#1da1f2;" class="form-signin-heading">Ücretsiz Üyelik Oluştur</h2>
+
+        @if (ViewBag.Mesaj != null)
+            {
+                if (ViewBag.Mesaj == "Başarılı")
+                {
+                <div class="alert alert-block alert-success fade in">
+                    <strong>Başarılı</strong><br /> Üyelik talebiniz alındı...
+                </div> 
+            }
+            else if (ViewBag.Mesaj == "Mail Hatası")
+            {
+                <div class="alert alert-block alert-danger fade in">
+                    <strong>Mail Gönderilemedi! </strong> Mail adresinizi veya internet bağlantınızı kontrol ediniz.
+                </div>
+            }
+            else if (ViewBag.Mesaj == "Tekrar Başvuru")
+            {
+                <div class="alert alert-block alert-danger fade in">
+                    <strong>Tekrar Başvuru</strong><br />Bölüm adına daha önce <strong>@ViewBag.Text</strong>  mail adresiyle başvuru yapılmış <br />Lütfen başvuru onayını bekleyiniz...
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-block alert-danger fade in">
+                    <strong>Kayıtlı Kullanıcı</strong><br /> @ViewBag.Mesaj
+                </div>
+            }
+        }
+
+        <div class="login-wrap">
+            <p>Kişisel bilgilerinizi giriniz</p>
+            <div class="form-group">
+                <input id="ad" type="text" class="form-control " name="TalepEdenAdi" placeholder="Ad" autofocus required="required">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control " name="TalepEdenSoyadi" placeholder="Soyad" required="required">
+            </div>
+            <div class="form-group">
+                <input style="font-size:12px;" type="email" class="form-control" name="TalepEdenMail" placeholder="Email" required="required">
+            </div>
+            <p>Kurumsal bilgilerinizi giriniz</p>
+            <div class="form-group">
+                <select name="TalepEdenUniID" class="form-control selectpicker" data-live-search="true">
+                    <option value="">Üniversite seçiniz</option>
+                    @foreach (Universiteler u in Data.Universite)
+                                {
+                        <option value="@u.UniversiteID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(u.Universite.ToLower())</option>
+                                }
+                </select>
+
+            </div>
+            <div class="form-group">
+                <select name="TalepEdenFakulteID" class="form-control selectpicker" data-live-search="true">
+                    <option value="">Fakülte/MYO seçiniz</option>                    
+                    @foreach (Fakulteler f in Data.Fakulte)
+                    {
+                        <option value="@f.FakulteID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(f.Fakulte.ToLower())</option>
+                    }                   
+                </select>
+            </div>
+            <div class="form-group">
+                <select name="TalepEdenBolumID" class="form-control selectpicker" data-live-search="true">
+                    <option value="">Bölüm seçiniz</option>
+                    @foreach (Bolumler b in Data.Bolum)
+                    {
+                        <option value="@b.BolumID">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(b.Bolum.ToLower())</option>
+                    }                    
+                </select>
+
+            </div>
+
+            <button id="uyeOl"  style="background-color:#1da1f2; color:white;" class="btn btn-lg btn-block" type="submit" data-loading-text="İşleniyor..."> Üye Ol</button>
+    
+
+
+            <div style="float:right; margin-right:5px;" class="registration">
+                Zaten Üyeyim
+                <a class="" href="/Uye/GirisYap">Giriş</a>
+            </div>         
+        </div>
+    </form>
+</div>
+
+    <script src="/Content/js/jquery-1.8.3.min.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script src="/Content/js/common-scripts.js"></script> 
+    <script src="/Content/js/advanced-form-components.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+
+    <script type="text/javascript" charset="utf-8">
+       $('.selectpicker').selectpicker({
+              style: 'btn-new',
+              size: 6
+       });
+
+       $('#uyeOl').on('click', function () {
+           var $this = $(this);
+           $this.button('loading');
+           //setTimeout(function () {
+           //    $this.button('reset');
+           //}, 8000);
+       });
+    </script>
+
+</body>
+
+
+</html>
+

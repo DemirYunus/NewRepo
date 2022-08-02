@@ -1,0 +1,148 @@
+﻿
+@{
+    ViewBag.Title = "TanitimMailiAt";
+}
+
+@section head{
+    <link href="~/Content/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link href="~/Content/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+    <link href="~/css/MyStyle.css" rel="stylesheet" />
+    <style>
+        .t {
+            white-space: pre-wrap; /* css-3 */
+            white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+            white-space: -pre-wrap; /* Opera 4-6 */
+            white-space: -o-pre-wrap; /* Opera 7 */
+            word-wrap: break-word; /* Internet Explorer 5.5+ */
+            overflow-wrap: break-word;
+        }
+    </style>
+}
+
+@using Muafiyet.Models
+@using Muafiyet.App_Classes
+
+<div class="modal fade" id="ModalMail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="form">
+                <form action="/Uye/TanitimMailiAt" method="post" role="form" name="formMail" id="formMail">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Tanıtım Maili Gönder</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12"> 
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Email:</label>
+                                    <input type="email" autocomplete="off" role="presentation" class="form-control input-sm m-bot15" id="email" placeholder="Email giriniz" required="required" value="" name="email">
+                                </div>                              
+                            </div>                            
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+                        <button class="btn btn-success Gonder" type="submit"> Gönder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                Tanıtım
+                <hr />
+                <a href="#ModalMail" data-toggle="modal" class="btn btn-primary btn-sm modalMail"><i class="icon-envelope"></i>   Tanıtım Maili Gönder</a>              
+                <input id="toastrText" type="hidden" value="@TempData["Text"]" name="toastrText" />
+                <input id="toastrType" type="hidden" value="@TempData["Durum"]" name="toastrType" />
+            </header>
+            <div class="panel-body">
+                
+            </div>
+        </section>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Content/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" language="javascript" src="~/Content/assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    @*<script src="~/Scripts/JavaScript.js"></script>*@
+
+    <script type="text/javascript" charset="utf-8">
+
+        $(document).ready(function () {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            var text = document.getElementById("toastrText").value;
+            var durum = document.getElementById("toastrType").value;
+
+            if (durum == "Başarılı") {
+                toastr.success("Tanıtım Maili Gönderildi", "Başarılı");
+            }
+            else if (durum == "Mail Hatası") {
+                toastr.error("Mail gönderilemedi...", "Hata");
+            }
+            
+
+            $('#example').dataTable({
+                "aaSorting": [[4, "desc"]]
+            });
+
+        });
+
+        $(".modalOnay").click(function () {
+            var uni = $(this).data("uni");
+            var fakt = $(this).data("fak");
+            var blm = $(this).data("blm");
+            var id = $(this).data("talepid");
+
+            $("#unii").val(uni) ;
+            $("#fktii").val(fakt);
+            $("#blmii").val(blm);
+            $("#uyeID").val(id);
+        });
+
+        $(".modalRed").click(function () {
+            var uni = $(this).data("uni");
+            var fakt = $(this).data("fak");
+            var blm = $(this).data("blm");
+            var id = $(this).data("talepid");
+
+            $("#uniil").val(uni);
+            $("#fktiil").val(fakt);
+            $("#blmiil").val(blm);
+            $("#uyeIDRed").val(id);
+        });
+
+    </script>
+
+    <script type="text/javascript" src="~/Content/assets/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+    <script src="~/Content/js/form-validation-script.js"></script>
+}
+
+

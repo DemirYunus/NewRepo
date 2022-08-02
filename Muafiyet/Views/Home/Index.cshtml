@@ -1,0 +1,462 @@
+﻿
+@{
+    ViewBag.Title = "MUAF || Ana Sayfa";
+    Layout = "~/Views/Shared/_LayoutGiris.cshtml";
+}
+@section head{ 
+<link href="~/Content/css/bootstrap.min.css" rel="stylesheet">
+<link href="~/Content/css/bootstrap-reset.css" rel="stylesheet">
+<link href="~/Content/assets/fancybox/source/jquery.fancybox.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="~/Content/css/gallery.css" />
+
+    <style>
+       .panel-title{
+           font-weight:bold;
+       }
+    </style>
+    }
+
+<div style="font-size:16px;" class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+               <strong>Kullanım Klavuzu</strong>                 
+            </header>
+            <div class="panel-body">
+                <div class="panel-group m-bot20" id="accordion">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                    Başlarken
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in">
+                            <div class="panel-body">                               
+                                <p>&#9656; Muaf üniversitelerin mevzuatlarına uygun bir şekilde geliştirilmiş web tabalı (online) muafiyet/denklik değerlendirme sistemidir.</p>
+                                <p>&#9656; Muaf uzun yıllar muafiyet komisyonunda görev alan <a href="/Home/Yazar">Arş. Gör. Yunus Demir</a>  tarafından geliştirilmiştir.</p>
+                                <p>&#9656; Sistem esnek bir tasarıma sahip olduğundan, tüm yüksek öğretim kurumlarınca rahatlıkla kullanılabilmektedir. Bunun için sisteme girdikten sonra ayarlar sayfasına girerek bölümünüze uygun parametreleri belirlememeniz gerekmektedir.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                   Genel Tanımlar
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <p>&#9656; Alınan Ders: Öğrencinin daha önce kayıtlı olduğu yüksek öğrenim kurumundan aldığı derstir.</p> 
+                                <p>&#9656; Muaf Olunmak İstenen Ders: Öğrencinin yeni kayıt yaptırıdığı yüksek öğrenim kurumunun müfredatında bulunan ve öğrencinin muaf olmak istediği derstir.</p> 
+                                <p>&#9656; Muafiyet Başvurusu: Öğrencinin daha önce kayıtlı olduğu yüksek öğrenim kurumundan aldığı derslere karşılık, şu an kayıtlı olduğu yüksek öğrenim kurumu müfredatındaki bazı derslerden muaf olmak üzere güz döneminde yaptığı başvurudur.</p> 
+                                <p>&#9656; Denklik Başvurusu: Öğrencinin, kayıtlı olduğu yüksek öğrenim kurumu dışında yaz okulunda açılan derslerin, kayıtlı olduğu yüksek öğrenim kurumundaki derslere denlkiğinin sorgulattığı başvurudur.  Öğrenci yaz okulu dersi almadan bu denliği almak zorundadır. Aksi taktirde başarılı olsa dahi kayıtlı olduğu üniversitede bu derse denk geldiğini düşündüğü dersten muaf olamayacaktır.</p> 
+                            </div>
+                        </div>
+                    </div>                     
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwoo">
+                                    Üyelik
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwoo" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>&#9656;  MUAF tamamen ücretsiz bir yazılımdır. <a href="/Uyelik/UyeOl">Üyelik sayfasından</a>  gerekli bilgileri doldurduktan sonra, şifreniz belirttiğiniz e-mail adresine gönderilecektir.</p>
+                                     
+                                        <p>&#9656; Her bölüm için bir üyelik yapılır. Daha önce bölümünüz adına kayıt yapılmışsa, kayıt yapan öğretim elemanına ait bilgiler yazılım tarafından dönderilir.</p>
+
+                                    </div>                              
+                                </div>
+                               
+                                <ul class="grid cs-style-3">
+                                        <li>
+                                            <figure>
+                                                <img src="~/Content/img/UyeOl-1.png" alt="img04">
+                                                <figcaption>
+                                                    <h3>Üyelik-1</h3>
+                                                    <span>Yeni Üye </span>
+                                                    <a class="fancybox" rel="group" href="~/Content/img/UyeOl-1.png">İncele</a>
+                                                </figcaption>
+                                            </figure>
+                                        </li>
+                                        <li>
+                                            <figure>
+                                                <img src="~/Content/img/UyeOl_2.png" alt="img05">
+                                                <figcaption>
+                                                    <h3>Üyelik-2</h3>
+                                                    <span>Kayıtlı Üye </span>
+                                                    <a class="fancybox" rel="group" href="~/Content/img/UyeOl_2.png">İncele</a>
+                                                </figcaption>
+                                            </figure>
+                                        </li>
+                                    </ul>
+                            
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseAyarlar">
+                                    Ayarlar
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseAyarlar" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>&#9656;  Bu sayfa, kullanıcıya göre değişen parametrelerin ayarlandığı sayfadır. MUAF'a üye olduktan hemen sonra bu sayfadan gerekli ayarlamalar yapılmalıdır.</p>
+                                        <p>&#9656;  Sağ üst köşede isminizin yazdığı açılır kutuya tıklayarak "Ayarlar" sayfasına erişebilirsiniz.</p>
+                                        <p>&#9656; Sayfanın üsütünde, bölümünüzde kullanılan not sistemini ayarlayabileceğiniz açılır kutu bulunmaktadır. Üç tip not sisteminden size uygun olanı seçerek
+                                            <img src="~/Content/img/btnKaydet.png" /> butonuna tıklayınız.
+                                        </p>
+                                        <p>&#9656;  Not sistemini seçtikten sonra, hemen altta yer alan açılır kutudan intibakın krediye göre mi, AKTS'ye göre mi yapılacağını belirlemeniz gerekmektedir.</p>
+                                        <p>&#9656;  Daha sonra bir üst sınıfa intibak için gerekli kredi veya AKTS alt sınırını belirleyebilirsiniz.</p>
+                                    </div>
+                                  
+                                </div>
+
+                                <ul class="grid cs-style-3">
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Ayarlar-1.png" alt="img4a">
+                                            <figcaption>
+                                                <h3>Ayarlar-1</h3>
+                                                <span>Ayarlar </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Ayarlar-1.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Ayarlar-2.png" alt="img5a">
+                                            <figcaption>
+                                                <h3>Ayarlar-2</h3>
+                                                <span>Ayarlar </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Ayarlar-2.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                  Kullanıcılar
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>&#9656;  Muafiyet/denklik başvurusunda bulunan öğrencilerin ve komisyon üyelerinin bilgilerinin girildiği sayfadır.</p>
+
+                                        <p>&#9656;  Varsayılan olarak sadece öğretim üyeleri (komisyon üyeleri) listelenir.
+                                            <img src="~/Content/img/btnFiltreler.png" /> butonuna tıklanarak öğrenciler veya tüm kayıtlar listelenebilmektedir. </p>
+
+                                        <p>&#9656; Sayfanın üstünde yer alan <img src="~/Content/img/btnYeniKullanici.png" /> butonuna tıklanarak açılan pencereden yeni kullanıcı tanımlanır.</p>
+
+                                        <p>&#9656; Kayıtlı kullanıcıya ait veriler, 
+                                            <img src="~/Content/img/btnGuncelle.png" /> butonuna tıklanarak açılan pencereden güncellenebilir.</p>
+
+                                        <p>&#9656; Eğer kayıtlı kullanıcıya ait henüz bir başvuru tanımlanmamış ise 
+                                            <img src="~/Content/img/btnSil.png" />  butonuna tıklanarak kayıt silinebilir. Kullanıcıya ait bir başvuru kayıtlı ise, kullanıcının silinmesine izin verilmeyecektir.
+                                        </p>
+
+                                        <p>&#9656; Sadece öğretim üyesi olarak tanımlanmış kayıtlarda beliren
+                                            <img src="~/Content/img/btnRol.png" />  butonuna tıklanarak açılan pencereden ilgili öğretim üyesine ait yetki güncellenebilmektedir.
+                                        </p>
+                                    </div>
+                                </div>
+                                <ul class="grid cs-style-3">
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Kullanicilar-1a.png" alt="img05">
+                                            <figcaption>
+                                                <h3>Kullanıcılar-1</h3>
+                                                <span>Kullanıcı listesi </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Kullanicilar-1a.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Kullanicilar-2.png" alt="img06">
+                                            <figcaption>
+                                                <h3>Kullanıcılar-2</h3>
+                                                <span>Yeni kullanıcı ekleme </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Kullanicilar-2.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
+                                  Dersler
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseSix" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <p>&#9656; Alınan derslerin veya muaf olunmak istenen derslerin tanımlandığı sayfadır.</p>
+                                <p>&#9656; Sayfanın üstünde yer alan <img src="~/Content/img/btnYeniDers.png" /> butonuna tıklanarak açılan pencereden yeni ders tanımlanır.</p>
+                                <p>&#9656; Ders tanımlama penceresi üç sekmeden oluşmaktadır. İlk sekmede derse ait temel bilgiler girilir.</p>
+                                <p>&#9656; İki ve üçüncü sekmelerde derse ait içerikler tanımlanır. İkinci sekmede ders içeriğinin bulunduğu sayfanın adresi kaydedilebilir veya içerik taranarak pdf veya resim dosyası şeklinde kaydedilebilmektedir.</p>
+                                <p>&#9656; Üçüncü sekmede ders içeriği editör vasıtası ile elle tanımlanabilmektedir.</p>
+                                <p>&#9656; Varsayılan olarak sadece bölümünüze ait dersler listelenir.  
+                                    <img src="~/Content/img/btnFiltreler.png" /> Butonuna tıklanarak listelenecek kayıtlar genişletilebilmektedir.</p>
+                                <p>&#9656; Ders listesinde içerik sütununda görünen <img src="~/Content/img/lblYok.png" /> etiketi ilgili derse ait herhangi bir içerik tanımlanmadığını, <img src="~/Content/img/lblVar.png" /> etiketi ise üç içerik tipinden en az birinin tanımlandığını gösterir. </p>
+                                <p>&#9656; <img src="~/Content/img/btnGuncelle.png" /> butonuna tıklanarak ilgili derse ait bilgileri güncellenebilmekte, <img src="~/Content/img/btnSil.png" /> butonuna tıklanarak ilgili ders (herhangi başvuruda kullanmada ise) silinebilmektedir.</p>
+
+                                <ul class="grid cs-style-3">
+                                    <li>
+                                        <figure>                                           
+                                            <img src="~/Content/img/DerslerKucuk-1b.png" alt="img07" />                                          
+                                            <figcaption>
+                                                <h3>Dersler-1</h3>
+                                                <span>Ders listesi </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Dersler-1.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Ders Ekle-1.png" alt="img08"/>
+                                            <figcaption>
+                                                <h3>Ders Ekle-1</h3>
+                                                <span>Yeni ders ekleme </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Ders Ekle-1.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Ders Ekle-2.png" alt="img09" />
+                                            <figcaption>
+                                                <h3>Ders Ekle-2</h3>
+                                                <span>Yeni ders ekleme </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Ders Ekle-2.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Ders Ekle-3.png" alt="img010" />
+                                            <figcaption>
+                                                <h3>Ders Ekle-3</h3>
+                                                <span>Yeni ders ekleme </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Ders Ekle-3.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Ders Ekle-4.png" alt="img010a" />
+                                            <figcaption>
+                                                <h3>Ders Ekle-4</h3>
+                                                <span>İçerik linki ekleme </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Ders Ekle-4.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>                   
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                                    Başvurular
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseFour" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <p>&#9656; Muafiyet/Denklik başvurularının sisteme girildiği sayfadır.</p>
+                                <p>&#9656; Sık kullanıldığından dolayı sisteme giriş yaptıktan sonra açılan ilk sayfadır.</p>
+                                <p>&#9656; Muafiyet/Denklik başvurusu iki aşamada yapılmaktadır.</p>
+                                <p>&#9656; İlk aşamada başvurusuya ait genel bilgiler girilir.</p>
+                                <p>&#9656; Sayfanın üstünde yer alan <img src="~/Content/img/btnYeniBasvuru.png" /> butonuna tıklanarak açılan pencereden yeni başvuru tanımlanır.</p>
+                                <p>&#9656; Başvuru yapan öğrencinin numarası girilir ve <img src="~/Content/img/btnGetir.png" /> butonuna tıklanır. Öğrencinin daha önce kaydı varsa bilgileri getirilir.</p>
+                                <p>&#9656; Başvuranan öğrencinin kaydı yoksa  önce <img src="~/Content/img/btnYeniOgrenci.png" /> butonuna tıklanır ve açılan pencereden öğrenciye ait bilgiler girilir daha sonra öğrencinin numarası, üstteki metin kutusuna girilir ve <img src="~/Content/img/btnGetir.png" /> butonuna tıklanarak öğrenciye ait bilgiler getirilir.</p>
+                                <p>&#9656; Öğrenciye ait bilgilerin gelmesi ile pencerenin sağında başvuru yapılan yüksek öğrenim kurumuna ait bilgileri girmenizi sağlayan elemanlar görüntülenecektir.</p>
+                                <p>&#9656; Sayfanın altında bulunan açılır kutu ile, daha önce kayıtlı olunana yüksek öğrenim kurumunda kullanılan not sisteminin doğru tercih edilmesi büyük önem arz etmektedir. Çünkü MUAF tarafından hazırlanacak komisyon raporunda, daha önce alınan derslerin notlarının, yeni kayıt yapılan yüksek öğrenim kurumunun not sistemine dönüşümü bu tercihe göre otomatik olarak yapılcaktır.</p>
+                                <p>&#9656; <img src="~/Content/img/btnKaydet.png" /> butonuna basılı ve başvuru sürecinde ikinci aşama olan ders tercih sayfasına geçilir.</p>
+
+                                <ul class="grid cs-style-3">
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Basvurular-1.png" alt="img011" />
+                                            <figcaption>
+                                                <h3>Basvurular-1</h3>
+                                                <span>Başvuru listesi </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Basvurular-1.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Basvurular-2.png" alt="img012" />
+                                            <figcaption>
+                                                <h3>Başvurular-2</h3>
+                                                <span>Yeni başvuru ekle</span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Basvurular-2.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Basvurular-3.png" alt="img013" />
+                                            <figcaption>
+                                                <h3>Başvurular-3</h3>
+                                                <span>Yeni başvuru ekleme </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Basvurular-3.png" >İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Tercihler-2Kucukb.png" alt="img021" />
+                                            <figcaption>
+                                                <h3>Tercih Ekle-2</h3>
+                                                <span>Yeni tercih ekleme </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Tercih Ekle-2.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Tercih Ekle-1.png" alt="img020" />
+                                            <figcaption>
+                                                <h3>Tercih Ekle-1</h3>
+                                                <span>Yeni tercih ekleme </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Tercih Ekle-1.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>                   
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseEight">
+                                    İçerik Değerlendirme
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseEight" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <p>&#9656; Ders tercihlerinin, komisyon üyelerince içerik bakımından değerlendirildiği sayfadır.</p>
+                                <p>&#9656; Bu sayfada, sisteme giren komisyon üyesince sadece karara bağlanmamış tercihler listelenir.</p>
+                                <p>&#9656; Komisyon üyeleri her tercihteki <img src="~/Content/img/btnInfo.png" /> butonuna tıklayarak, öğrencinin daha önce kayıtlı olduğu yüksek öğrenim kurumuna ait dersin içeriğine ulaşabilmektedir.</p>
+                                <p>&#9656; İçeriği inceleyen komisyon üyesi <img src="~/Content/img/btnKarar.png" /> butonuna tıklayarak açılan pencereden kararını sisteme girer.</p>
+                                <p>&#9656; Üçte iki çoğunluğa göre  tercihin içerik bakımından durumu komisyon raporuna yansıtılır.</p>
+
+                                <ul class="grid cs-style-3">
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Icerik-1.png" alt="img016" />
+                                            <figcaption>
+                                                <h3>İçerik-1</h3>
+                                                <span>İçerik Değerlendirme </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Icerik-1.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Icerik-2a.png" alt="img017" />
+                                            <figcaption>
+                                                <h3>İçerik-2</h3>
+                                                <span>İçerik Bilgi</span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Icerik-2a.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Icerik-3a.png" alt="img018" />
+                                            <figcaption>
+                                                <h3>İçerik-3</h3>
+                                                <span>İçerik Karar </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Icerik-3a.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>                                  
+                                </ul>
+                            </div>
+                        </div>
+                    </div>                  
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">
+                                    Komisyon Raporu
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseSeven" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <p>&#9656; Komisyon raporuna "Başvurular" sayfasında, her başvuru kaydında bulunan <img src="~/Content/img/btnRapor.png" /> butonuna tıklayarak ulaşılır.</p>
+
+                                <ul class="grid cs-style-3">
+                                    <li>
+                                        <figure>
+                                            <img src="~/Content/img/Raporlar-1.png" alt="img036" />
+                                            <figcaption>
+                                                <h3>Raporlar-1</h3>
+                                                <span>Komisyon Raporu </span>
+                                                <a class="fancybox" rel="group" href="~/Content/img/Raporlar-1.png">İncele</a>
+                                            </figcaption>
+                                        </figure>
+                                    </li>                                   
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section scripts{
+<script src="/Content/js/jquery.js"></script>
+<script src="/Content/js/bootstrap.min.js"></script>
+<script src="/Content/assets/fancybox/source/jquery.fancybox.js"></script>
+<script src="/Content/js/modernizr.custom.js"></script>
+<script src="/Content/js/toucheffects.js"></script>
+
+<script type="text/javascript">
+      $(function() {
+        //    fancybox
+          jQuery(".fancybox").fancybox();
+      });
+
+</script>
+    }
+

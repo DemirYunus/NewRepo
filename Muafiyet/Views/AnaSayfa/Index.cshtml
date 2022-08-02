@@ -1,0 +1,149 @@
+﻿
+@{
+    ViewBag.Title = "MUAF || Ana Sayfa";
+    Layout = "~/Views/Shared/_LayoutGiris.cshtml";
+}
+
+@section head{
+<link href="~/css/font-awesome-4.7.0/cssfiles/font-awesome.css" rel="stylesheet" />
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <section class="panel">          
+            <div class="panel-body" style="background-color:#F1F2F7;">
+
+                <div class="row state-overview">
+                    <div class="col-lg-3 col-sm-6">
+                        <section class="panel">
+                            <div class="symbol blue">
+                                <i class="fa fa-university fa-5x"></i>
+                            </div>
+                            <div class="value">
+                                <h1 class=" count4">
+                                    0
+                                </h1>
+                                <p>Kayıtlı Üniversite</p>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <section class="panel">
+                            <div class="symbol terques">
+                                <i class="fa fa-graduation-cap fa-5x"></i> 
+                            </div>
+                            <div class="value">
+                                <h1 class="count">
+                                    0
+                                </h1>
+                                <p>Kayıtlı Bölüm</p>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <section class="panel">
+                            <div class="symbol red">
+                                <i class="fa fa-wifi fa-5x"></i>
+                            </div>
+                            <div class="value">
+                                <h1 class=" count2">
+                                    0
+                                </h1>
+                                <p>Aktif Kullanıcı</p>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <section class="panel">
+                            <div class="symbol yellow">
+                                <i class=" icon-group"></i>
+                            </div>
+                            <div class="value">
+                                <h1 class=" count3">
+                                    0
+                                </h1>
+                                <p>Günlük Ziyaretçi</p>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <!--custom chart start-->
+                        <div class="border-head">
+                            <h3>Aylara Göre MUAF Giriş</h3>
+                        </div>
+                        <div class="custom-bar-chart">
+                            <ul class="y-axis">
+                                <li><span>100</span></li>
+                                <li><span>80</span></li>
+                                <li><span>60</span></li>
+                                <li><span>40</span></li>
+                                <li><span>20</span></li>
+                                <li><span>0</span></li>
+                            </ul>
+                            <div class="bar">
+                                <div class="title">OCA</div>
+                                <div class="value tooltips" data-original-title="80" data-toggle="tooltip" data-placement="top">80%</div>
+                            </div>
+                            <div class="bar ">
+                                <div class="title">ŞUB</div>
+                                <div class="value tooltips" data-original-title="50" data-toggle="tooltip" data-placement="top">50%</div>
+                            </div>
+                            <div class="bar ">
+                                <div class="title">MAR</div>
+                                <div class="value tooltips" data-original-title="40" data-toggle="tooltip" data-placement="top">40%</div>
+                            </div>
+                            <div class="bar ">
+                                <div class="title">NİS</div>
+                                <div class="value tooltips" data-original-title="55" data-toggle="tooltip" data-placement="top">55%</div>
+                            </div>
+                            <div class="bar">
+                                <div class="title">MAY</div>
+                                <div class="value tooltips" data-original-title="20" data-toggle="tooltip" data-placement="top">20%</div>
+                            </div>
+                            <div class="bar ">
+                                <div class="title">HAZ</div>
+                                <div class="value tooltips" data-original-title="39" data-toggle="tooltip" data-placement="top">39%</div>
+                            </div>
+                            <div class="bar">
+                                <div class="title">TEM</div>
+                                <div class="value tooltips" data-original-title="75" data-toggle="tooltip" data-placement="top">75%</div>
+                            </div>
+                            <div class="bar ">
+                                <div class="title">AĞU</div>
+                                <div class="value tooltips" data-original-title="45" data-toggle="tooltip" data-placement="top">45%</div>
+                            </div>
+                            <div class="bar ">
+                                <div class="title">EYL</div>
+                                <div class="value tooltips" data-original-title="50" data-toggle="tooltip" data-placement="top">50%</div>
+                            </div>
+                            <div class="bar ">
+                                <div class="title">EKİ</div>
+                                <div class="value tooltips" data-original-title="42" data-toggle="tooltip" data-placement="top">42%</div>
+                            </div>
+                            <div class="bar ">
+                                <div class="title">KAS</div>
+                                <div class="value tooltips" data-original-title="60" data-toggle="tooltip" data-placement="top">60%</div>
+                            </div>
+                            <div class="bar ">
+                                <div class="title">ARA</div>
+                                <div class="value tooltips" data-original-title="90" data-toggle="tooltip" data-placement="top">90%</div>
+                            </div>
+                        </div>
+                        <!--custom chart end-->
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+    </div>
+</div>
+
+@section scripts{
+    <script src="/Content/js/sparkline-chart.js"></script>
+    <script src="/Content/js/easy-pie-chart.js"></script>
+    <script src="/Content/js/count.js"></script>
+}

@@ -1,0 +1,357 @@
+﻿
+@{
+    ViewBag.Title = "MUAF || Bölüm Dersleri";
+}
+
+@section head{
+    <link href="~/Content/css/style.css" rel="stylesheet">
+    <link href="~/Content/css/style-responsive.css" rel="stylesheet" />
+    <link href="~/Content/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <link href="/Content/css/style.css" rel="stylesheet">
+    <link href="/Content/css/style-responsive.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/Content/assets/bootstrap-fileupload/bootstrap-fileupload.css" />
+<link href="~/Content/toastr.css" rel="stylesheet" />
+    <link href="/css/MyStyle.css" rel="stylesheet" />
+
+}
+@using Muafiyet.Models
+@model List<BolumDersleri>
+
+
+<div class="modal fade" id="ModalEkle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/BolumDersleri/Ekle" method="post" role="form">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Ders Ekle</h4>
+                </div>
+                <div class="modal-body">
+                   
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Ders Kodu:</label>
+                            <input type="text" class="form-control input-sm m-bot15" id="DersKodu" placeholder="Dersin kodunu giriniz" name="DersKodu" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Ders Adı:</label>
+                            <input type="text" class="form-control input-sm m-bot15" id="DersAdi" placeholder="Dersin adını giriniz" name="DersAdi" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label>Sınıf:</label>
+                            <select name="Ders_SinifID" id="Ders_SinifID" class="form-control" data-live-search="true" required="required">
+                                <option value="1">1.Sınıf</option>
+                                <option value="2">2.Sınıf</option>
+                                <option value="3">3.Sınıf</option>
+                                <option value="4">4.Sınıf</option>
+                            </select>
+                        </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Kredi:</label>
+                            <select name="Kredi" id="Kredi" class="form-control" data-live-search="true" required="required">
+                                <option value="0">0</option>
+                                <option value="0.5">0.5</option>
+                                <option value="1">1</option>
+                                <option value="1.5">1.5</option>
+                                <option value="2">2</option>
+                                <option value="2.5">2.5</option>
+                                <option value="3">3</option>
+                                <option value="3.5">3.5</option>
+                                <option value="4">4</option>
+                                <option value="4.5">4.5</option>
+                                <option value="5">5</option>
+                                <option value="5.5">5.5</option>
+                                <option value="6">6</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>AKTS:</label>
+                            <select name="AKTS" id="AKTS" class="form-control" data-live-search="true" required="required">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+                    <button class="btn btn-warning KaydetMuafDers" id="KaydetDers" type="submit"> Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDersGuncelle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/BolumDersleri/Guncelle" method="post" role="form">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Ders Güncelle</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input id="DersID" type="hidden" name="DersID" required="required" />
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Ders Kodu:</label>
+                            <input type="text" class="form-control input-sm m-bot15" id="DersKoduG" placeholder="Dersin kodunu giriniz" name="DersKodu" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Ders Adı:</label>
+                            <input type="text" class="form-control input-sm m-bot15" id="DersAdiG" placeholder="Dersin adını giriniz" name="DersAdi" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label>Sınıf:</label>
+                            <select name="Ders_SinifID" id="Ders_SinifIDG" class="form-control" data-live-search="true" required="required">
+                                <option value="1">1.Sınıf</option>
+                                <option value="2">2.Sınıf</option>
+                                <option value="3">3.Sınıf</option>
+                                <option value="4">4.Sınıf</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Kredi:</label>
+                            <select name="Kredi" id="KrediG" class="form-control" data-live-search="true" required="required">
+                                <option value="0">0</option>
+                                <option value="0.5">0.5</option>
+                                <option value="1">1</option>
+                                <option value="1.5">1.5</option>
+                                <option value="2">2</option>
+                                <option value="2.5">2.5</option>
+                                <option value="3">3</option>
+                                <option value="3.5">3.5</option>
+                                <option value="4">4</option>
+                                <option value="4.5">4.5</option>
+                                <option value="5">5</option>
+                                <option value="5.5">5.5</option>
+                                <option value="6">6</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>AKTS:</label>
+                            <select name="AKTS" id="AKTSG" class="form-control" data-live-search="true" required="required">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+                    <button class="btn btn-warning dersGuncelle" id="dersGuncelle" type="submit"> Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalSil" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Ders Sil</h4>
+            </div>
+            <div class="modal-body">
+                <p class="mesaj"></p>
+                <p class="hata"></p>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">İptal</button>
+                <button class="btn btn-danger dersSil" type="button"> Evet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <section class="panel">
+            <header class="panel-heading">
+                Bölüm Dersleri
+                <hr />
+                <a href="#ModalEkle" data-toggle="modal" class="btn btn-primary btn-sm modalEkle">Yeni Ders</a>     <input id="toastrText" type="hidden" value="@TempData["Text"]" name="toastrText" />               
+                <input id="toastrType" type="hidden" value="@TempData["Durum"]" name="toastrType" />           
+            </header>
+            <div class="panel-body">
+                <div class="adv-table col-md-12">
+                    <table class="table table-striped table-advance table-hover display" id="example">
+                        <thead>
+                            <tr>
+                                <th>Ders Kodu </th>
+                                <th>Ders Adı</th>
+                                <th>Sınıfı</th>
+                                <th>Kredisi</th>
+                                <th>AKTS</th>
+                                <th>İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (BolumDersleri di in Model)
+                            {
+                                <tr>
+                                    <td>@di.DersKodu</td>
+                                    <td>@di.DersAdi</td>
+                                    <td>@di.Ders_SinifID</td>
+                                    <td>@di.Kredi</td>
+                                    <td>@di.AKTS</td>
+                                    <td>
+                                        <span data-toggle="modal" data-target="#modalDersGuncelle">
+                                            <a href="#modalDersGuncelle" class="btn btn-info btn-xs tooltips modalDersGuncelle" data-toggle="tooltip" data-placement="top" data-original-title="Güncelle" data-derskodu="@di.DersKodu" data-dersadi="@di.DersAdi" data-sinifi="@di.Ders_SinifID" data-kredi="@di.Kredi" data-akts="@di.AKTS" data-dersid="@di.DersID"><i class="icon-pencil"></i></a>
+                                        </span>
+                                        <span data-toggle="modal" data-target="#modalSil">
+                                            <a href="#modalSil" class="btn btn-danger btn-xs tooltips modalSil" data-toggle="tooltip" data-placement="top" data-original-title="Sil" data-dersadi="@di.DersAdi"  data-dersid="@di.DersID"><i class="icon-trash "></i></a>
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" language="javascript" src="~/Content/assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="/Content/assets/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="/Content/assets/bootstrap-fileupload/bootstrap-fileupload.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    @*<script src="~/Scripts/JavaScript.js"></script>*@
+
+
+    <script type="text/javascript" charset="utf-8">
+      
+        $(document).ready(function () {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            var text = document.getElementById("toastrText").value;
+            var durum = document.getElementById("toastrType").value;
+
+            if (durum == "Sil") {
+                toastr.success("Dersi silindi...", text);
+            }
+            else if (durum == "Ekle") {
+                toastr.success("Dersi eklendi...", text);
+            }
+            else if (durum == "Güncelle") {
+                toastr.success("Dersi güncellendi...", text);
+            }
+            else if (durum == "Hata") {
+                toastr.error(text, "Hata");
+            }
+
+            $('#example').dataTable({
+                "aaSorting": [[4, "desc"]]
+            });
+
+            $("#example").on("click", ".modalDersGuncelle", function () {
+                var dersid = $(this).data("dersid");
+                var dersKodu = $(this).data("derskodu");
+                var dersAdi = $(this).data("dersadi");
+                var sinifi = $(this).data("sinifi");
+                var kredi = $(this).data("kredi");
+                var akts = $(this).data("akts");
+
+
+                $("#DersKoduG").val(dersKodu);
+                $("#DersAdiG").val(dersAdi);
+                $("#Ders_SinifIDG").val(sinifi);
+                $("#KrediG").val(kredi);
+                $("#AKTSG").val(akts);
+                $("#DersID").val(dersid);
+            });
+
+            $("#example").on("click", ".modalSil", function () {
+                var dersadi = $(this).data("dersadi");
+
+                $(".modal-body>p.mesaj").html(dersadi + " dersi silinsin mi?");
+
+                var id = $(this).data("dersid");
+                $(".dersSil").data("id", id);
+            });
+
+        });
+
+
+        //$(".modalDersGuncelle").click(function () {
+        //    var dersid = $(this).data("dersid");
+        //    var dersKodu = $(this).data("derskodu");
+        //    var dersAdi = $(this).data("dersadi");
+        //    var sinifi = $(this).data("sinifi");
+        //    var kredi = $(this).data("kredi");
+        //    var akts = $(this).data("akts");
+
+
+        //    $("#DersKoduG").val(dersKodu);
+        //    $("#DersAdiG").val(dersAdi);
+        //    $("#Ders_SinifIDG").val(sinifi);
+        //    $("#KrediG").val(kredi);
+        //    $("#AKTSG").val(akts);
+        //    $("#DersID").val(dersid);
+
+        //    //$(".dersGuncelle").data("id", dersid);
+        //});
+
+        //$(".modalSil").click(function () {
+        //    var dersadi = $(this).data("dersadi");           
+
+        //    $(".modal-body>p.mesaj").html(dersadi + " dersi silinsin mi?");
+            
+        //    var id = $(this).data("dersid");
+        //    $(".dersSil").data("id", id);           
+        //});      
+
+        $(".dersSil").click(function () {
+            var id = $(this).data("id");
+            
+            $.ajax({
+                type: "POST",
+                url: "/BolumDersleri/Sil",
+                data: { "DersID": id },
+                success: function (durum) {
+                    if (durum == "başarılı") {
+                        window.location.replace("/BolumDersleri/Index");
+                    }
+                    else {
+                        $(".modal-body>p.hata").html("Silme anında bir hata oluştu");
+                    }
+                }
+            });
+        });
+    </script>
+
+    <script src="/Content/js/jquery-ui-1.9.2.custom.min.js"></script>
+    <script type="text/javascript" src="/Content/js/ga.js"></script>
+}
+
+

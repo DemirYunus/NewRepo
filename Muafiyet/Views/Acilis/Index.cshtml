@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "MUAF || Anasayfa";
+    Layout = "~/Views/Shared/_LayoutGiris.cshtml";
+}
+
+@section head{    
+    <link href="~/css/MyStyle.css" rel="stylesheet" />
+}
+
+<style>
+    #Ana {  
+         border-radius: 15px;      
+        color: white;
+        background-image: url('../../Content/img/cloud.png');
+        background-repeat: no-repeat;
+        background-size:100%;
+        background-position:center;        
+    }
+    #YazOkulu {
+       background-color:#feb820;            
+         color: #392616;
+        border-radius: 15px;
+        background-image: url('../../Content/img/Sun.png');
+        background-repeat: no-repeat;
+        background-position: right top;         
+    }
+    #Muafiyet {
+           background-color:#d4ac6e;      
+       color:#392616;
+        border-radius: 15px;
+        background-image: url('../../Content/img/yellowleaf.png');
+        background-repeat: no-repeat;
+        background-position: right top;      
+        
+    }
+    .font {
+        font-size:16px;
+        font-family:Arial;
+    }
+      .fontBig {
+        font-size:20px;
+        font-family:Arial;        
+    }
+
+ 
+</style>
+
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">         
+            <div class="panel-body">
+                <div id="Ana" class="jumbotron">   
+                    <div class="row">
+                        <div class="col-md-6">
+                             <h1 class="display-3"> MUAFF </h1>
+                            <p class="fontBig">Muaff üniversitelerin mevzuatlarına uygun bir şekilde geliştirilmiş web tabanlı (online) muafiyet/denklik değerlendirme sistemidir.</p>
+                            <p class="lead">
+                                <a class="btn btn-info btn-lg" href="/Uye/UyeOl" role="button">Ücretsiz Üyelik</a>
+                            </p>
+                        </div>
+                      
+                    </div> 
+                </div>
+                <div  class="row">
+                    <div class="col-md-6">
+                        <div id="Muafiyet" class="jumbotron">
+                            <h3>Muafiyet Başvurusu</h3>
+                            <p class="font">Muaff ile, üniversiteye yeni kayıt yaptıran öğrencilerin, daha önce herhangi bir yükseköğretim kurumundan alıp başardığı derslerden muafiyet işlemleri, pratik bir şekilde yürütülebilir.</p>
+                            <p class="font">Ders muafiyeti ile ilgili olarak dikkat edilmesi gereken husular için <a style="color:darkblue" href="~/Files/Hususlar.pdf" target="_blank">TIKLAYINIZ.</a> </p>
+                            <p class="font">Muafiyet başvuru formu için <a style="color:darkblue" href="~/Files/Dilekce.docx">TIKLAYINIZ</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="YazOkulu" class="jumbotron">
+                            <h3>Yaz Okulu Denklik Başvurusu</h3>
+                            <p class="font">Muaff ile, öğrencinin kayıtlı olduğu yüksek öğretim kurumu dışında yaz okulunda almak istediği bir dersin, öğrencinin kayıtlı olduğu yüksek öğrenim kurumuna denkliğinin değerlendirilmesi işlemleri pratik bir şekilde yürütülebilir.</p>
+                            <p class="font">Yaz okulu denklik ile ilgili olarak dikkat edilmesi gereken husular için <a style="color:darkblue" href="~/Files/Hususlar.pdf" target="_blank">TIKLAYINIZ.</a> </p>
+                            <p class="font">Yaz okulu denklik başvuru formu için <a style="color:darkblue" href="~/Files/Dilekce.docx">TIKLAYINIZ</a></p>
+                        </div>
+                    </div>
+                </div>               
+                </div>
+        </section>
+    </div>
+</div>
+

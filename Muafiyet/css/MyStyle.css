@@ -1,0 +1,45 @@
+﻿body {
+}
+
+
+#TabModal {
+    background-color:beige;
+}
+.btn-new {
+    background-color:white;
+    border-color:beige;
+    color:gray;
+    
+  height: 30px;
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;    
+}
+#up {
+height: 15px;
+}
+#down {
+height: 15px;
+}
+
+.form-signin h2.form-signin-heading {
+    margin: 0;
+    padding:20px 15px;
+    text-align: center;
+    background: #41cac0;
+    border-radius: 5px 5px 0 0;
+    -webkit-border-radius: 5px 5px 0 0;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 300;
+    font-family:Arial;
+}
+
+.notify-row {
+    float:right;
+    margin-right:-15px;
+}
+
+
+

@@ -1,0 +1,36 @@
+﻿@using Muafiyet.App_Classes
+
+@{
+    ViewBag.Title = "MUAF || Muafiyet Komisyon Raporu";
+
+    if (UyeInfo.KullaniciUniID==0)
+    {
+        Layout = "~/Views/Shared/_LayoutGiris.cshtml";
+    }
+}
+@using ReportViewerForMvc
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                @if (UyeInfo.KullaniciUniID != 0)
+                {
+                    if (TempData["Denklik"].ToString() == "0")
+                    {
+                        <a href="/Basvurular/Index" class="btn btn-primary btn-sm ">Listeye Dön</a>
+                    }
+                    else
+                    {
+                        <a href="/Basvurular/Denklik" class="btn btn-primary btn-sm ">Listeye Dön</a>
+                    }
+
+                }                
+            </header>
+            <div class="panel-body">
+                @Html.ReportViewer(ViewBag.Report as Microsoft.Reporting.WebForms.ReportViewer) 
+            </div>
+        </section>
+    </div>
+</div>
+
+
